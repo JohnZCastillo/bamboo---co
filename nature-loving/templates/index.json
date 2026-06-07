@@ -1,0 +1,95 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "header": "Sustainable Living, Naturally",
+        "paragraph": "Experience the quiet elegance of bamboo. Our curated collection brings intentional design and environmental stewardship into the heart of your home.",
+        "tagline": "EARTH-FRIENDLY EXCELLENCE",
+      }
+    },
+    "category": {
+      "type": "category",
+      "settings": {
+        "header": "Explore by Category",
+        "tagline": "View all Categories",
+      },
+      "blocks": {
+        "category_1": {
+          "type": "category",
+          "settings": {
+            "header": "Kitch & Dining",
+            "tagline": "Elevate every meal"
+          }
+        },
+        "category_2": {
+          "type": "category",
+          "settings": {
+            "header": "Bath & Personal Care",
+            "tagline": "Rituals of restoration"
+          }
+        },
+        "category_3": {
+          "type": "category",
+          "settings": {
+            "header": "Home & Organization",
+            "tagline": "Order in the everyday"
+          }
+        }
+      },
+      "block_order": [
+        "category_1",
+        "category_2",
+        "category_3",
+      ]
+    },
+    "best-seller": {
+      "type": "best-seller",
+      "settings": {
+        "header": "Bestsellers",
+      },
+      "blocks": {
+        "category_1": {
+          "type": "category",
+          "settings": {
+            "header": "Kitchen & Dining",
+            "price": 500,
+          }
+        },
+        "category_2": {
+          "type": "category",
+          "settings": {
+            "header": "Bath & Personal Care",
+            "price": 500,
+          }
+        },
+        "category_3": {
+          "type": "category",
+          "settings": {
+            "header": "Home & Organization",
+            "price": 500,
+          }
+        }
+      },
+      "block_order": [
+        "category_1",
+        "category_2",
+        "category_3",
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "category",
+    "best-seller"
+  ]
+}

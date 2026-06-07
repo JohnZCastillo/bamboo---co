@@ -1,0 +1,131 @@
+<div class="full-width container category-container">
+  <div class="category-wrapper">
+    <div class="category-header">
+      <h2>{{ section.settings.header }}</h2>
+      <a class="normal-link" href="{{ section.settings.product_list }}">{{ section.settings.tagline }}</a>
+    </div>
+    <div class="category-list">
+      {% for category in section.blocks %}
+        <div
+          class="category-item"
+          style="background-image: url('{{ 'category-1.png' | asset_url }}')"
+        >
+          <a class="normal-link" href="{{ category.settings.action }}">
+            <h3 class="category-item-header">{{ category.settings.header }}</h3>
+            <p class="category-item-tagline">{{ category.settings.tagline }}</p>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .category-container {
+    padding-block: 80px;
+  }
+
+  .category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 48px;
+  }
+
+  .category-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+
+  .category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: end;
+    height: 463px;
+    padding: 48px;
+    border-radius: 10px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+
+    color: white;
+  }
+
+  .category-item-header {
+    font-size: 24px;
+    font-weight: 400;
+  }
+
+  .category-item-tagline {
+    font-size: 14px;
+  }
+
+  @media (max-width: 1100px) {
+    .highlights {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Category",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Header"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline"
+    },
+    {
+      "type": "text",
+      "id": "paragraph",
+      "label": "paragraph"
+    },
+    {
+      "type": "image_picker",
+      "id": "background",
+      "label": "Background"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Product List"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "category",
+      "type": "category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "header",
+          "label": "Header"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tagline"
+        },
+        {
+          "type": "image_picker",
+          "id": "background",
+          "label": "Background"
+        },
+        {
+          "type": "url",
+          "id": "action",
+          "label": "Action"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="mission-wrapper">
+    <div>
+      <img src="{{ section.settings.background | image: width 300 }}">
+    </div>
+    <div>
+      <h2>
+        {{ section.settings.header }}
+      </h2>
+      <p>{{ section.settings.paragraph }}</p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Mission",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Header"
+    },
+    {
+      "type": "text",
+      "id": "paragraph",
+      "label": "Paragraph"
+    },
+    {
+      "type": "text",
+      "id": "fun_fact",
+      "label": "Fun Fact"
+    },
+    {
+      "type": "image_picker",
+      "id": "background",
+      "label": "Background"
+    }
+  ]
+}
+{% endschema %}
