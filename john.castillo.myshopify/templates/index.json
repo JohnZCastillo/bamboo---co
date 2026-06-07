@@ -1,0 +1,95 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "hello-world",
+      "settings": {
+        "heading": "Power Your Home with Clean Solar Energy",
+        "paragraph": "Join the movement towards sustainable living with state-of-the-art solar technology tailored for your home and lifestyle."
+      }
+    },
+    "benifit": {
+      "type": "benifits",
+      "blocks": {
+        "benefit_1": {
+          "type": "benefit",
+          "settings": {
+            "title": "Save Money",
+            "description": "Slash your monthly utility bills by up to 90% through efficient energy generation.",
+            "icon_emoji": "🚀"
+          }
+        },
+        "benefit_2": {
+          "type": "benefit",
+          "settings": {
+            "title": "Eco-Friendly",
+            "description": "Reduce your carbon footprint and contribute to a healthier, greener planet.",
+            "icon_emoji": "🚀"
+          }
+        },
+        "benefit_3": {
+          "type": "benefit",
+          "settings": {
+            "title": "25-Year Warranty",
+            "description": "Industry-leading protection ensuring your investment stays powered for decades.",
+            "icon_emoji": "🚀"
+          }
+        },
+        "benefit_4": {
+          "type": "benefit",
+          "settings": {
+            "title": "Easy Installation",
+            "description": "Our expert team handles everything from permits to final grid connection.",
+            "icon_emoji": "🚀"
+          }
+        }
+      },
+      "block_order": [
+        "benefit_1",
+        "benefit_2",
+        "benefit_3",
+        "benefit_4",
+      ]
+    },
+    "estimator": {
+      "type": "saving-estimator",
+      "settings": {
+        "heading": "Calculate Your Solar ROI",
+        "paragraph": "See how much you could save over time by switching to clean, renewable sun power."
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "header": "Trusted by Thousands of Homeowners",
+      },
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "name": "John Castillo",
+            "location": "Imus Cavite",
+            "paragraph": "Switching to SunPower Solutions was the best investment we made for our home. The installation was seamless, and seeing our energy bill drop almost to zero was incredible. Highly recommend their professional team!"
+          }
+        }
+      },
+      "block_order": [
+        "review_1"
+      ]
+    }
+  },
+  "order": [
+    "main",
+    "benifit",
+    "estimator",
+    "reviews"
+  ]
+}

@@ -1,0 +1,73 @@
+<section class="benifit-wrapper">
+  <div class="benefits-grid">
+    {% for block in section.blocks %}
+      <div class="benefit-item">
+        {% if block.settings.icon_emoji != '' %}
+          <div class="benefit-icon">
+            {{ block.settings.icon_emoji }}
+          </div>
+        {% endif %}
+
+        <h3>{{ block.settings.title }}</h3>
+        <p>{{ block.settings.description }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .benifit-wrapper {
+    padding-inline: 10px;
+    padding-block: 30px;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .benefit-item {
+    padding: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 10px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hello World",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Benefit Title",
+          "default": "Fast Delivery"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "We deliver in 24 hours"
+        },
+        {
+          "type": "text",
+          "id": "icon_emoji",
+          "label": "Icon"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hello World Template",
+      "category": "Demo"
+    }
+  ]
+}
+{% endschema %}

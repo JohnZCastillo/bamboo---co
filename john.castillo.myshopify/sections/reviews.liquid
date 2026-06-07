@@ -1,0 +1,91 @@
+<section class="benifit-wrapper">
+  <div class="review-container">
+    <div>
+      <h2>{{ section.settings.header }}</h2>
+    </div>
+    <div class="review-wrapper">
+      {% for review in section.blocks %}
+        <div>
+          <p>{{ review.settings.paragraph }}</p>
+          <div class="review-info">
+            <p>{{ review.settings.name }}</p>
+            <p>{{ review.settings.location }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .benifit-wrapper {
+    padding-inline: 10px;
+    padding-block: 30px;
+  }
+
+  .review-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .review-wrapper {
+    background-color: #c3c9b9;
+    padding: 20px;
+    border-radius: 10px;
+    color: black;
+  }
+  .review-info {
+    margin-top: 10px;
+  }
+  .review-item {
+    padding: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 10px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Review",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Header"
+    },
+    {
+      "type": "number",
+      "id": "rating",
+      "label": "Rating"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location"
+        },
+        {
+          "type": "text",
+          "id": "paragraph",
+          "label": "Paragraph"
+        },
+        {
+          "type": "image_picker",
+          "id": "profile",
+          "label": "Profile"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
