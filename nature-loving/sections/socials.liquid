@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="social-wrapper">
+    <div class="social-heading">
+      <h2>{{ section.settings.header }}</h2>
+      <p>{{ section.settings.paragraph }}</p>
+    </div>
+    <div class="social-images">
+      <img class="social-images-item" src="{{ section.settings.image_1 | image_url: width: 300 }}">
+      <img class="social-images-item" src="{{ section.settings.image_2 | image_url: width: 300 }}">
+      <img class="social-images-item" src="{{ section.settings.image_3 | image_url: width: 300 }}">
+      <img class="social-images-item" src="{{ section.settings.image_4 | image_url: width: 300 }}">
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .social-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .social-images {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Socials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Header"
+    },
+    {
+      "type": "text",
+      "id": "paragraph",
+      "label": "Paragraph"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Image 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_4",
+      "label": "Image 4"
+    }
+  ]
+}
+{% endschema %}

@@ -1,35 +1,81 @@
-<footer>
-  <div class="footer__copyright">
+<footer class="container">
+  <div class="footer-top">
+    <di>
+      <p class="footer-top-heading company-name">
+        {{ shop.name }}
+      </p>
+      <div class="footer-top-bottom">
+        <p>Elevating the everyday through sustainable, artisan-crafted bamboo home goods.</p>
+      </div>
+    </di>
+    <di>
+      <p class="footer-top-heading">Shop</p>
+      <div class="footer-top-bottom">
+        <p>Elevating the everyday through sustainable, artisan-crafted bamboo home goods.</p>
+      </div>
+    </di>
+    <di>
+      <p class="footer-top-heading">Company</p>
+      <div class="footer-top-bottom">
+        <p>Elevating the everyday through sustainable, artisan-crafted bamboo home goods.</p>
+      </div>
+    </di>
+    <di>
+      <p class="footer-top-heading">Support</p>
+      <div class="footer-top-bottom">
+        <p>Elevating the everyday through sustainable, artisan-crafted bamboo home goods.</p>
+      </div>
+    </di>
+  </div>
+  <div class="footer-bottom">
     &copy;
     {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}, {{ powered_by_link }}
-  </div>
-
-  <div class="footer__links">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
-
-  <div class="footer__payment">
-    {% if section.settings.show_payment_icons %}
-      {% for type in shop.enabled_payment_types %}
-        {{ type | payment_type_svg_tag }}
-      {% endfor %}
-    {% endif %}
+    {{ shop.name | link_to: routes.root_url }}
   </div>
 </footer>
 
 {% stylesheet %}
-  footer {
+  .footer-bottom {
     display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+    padding-bottom: 10px;
+    font-size: 12px;
+    font-weight: bolder;
+    color: #50453b;
   }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .footer-top-heading {
+    color: #4a6546;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .footer-top-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .company-name {
+    font-size: 24px;
+    margin-bottom: 3px;
+  }
+
   footer a {
     text-decoration: none;
     color: var(--color-foreground);
   }
+
   footer .footer__links,
   footer .footer__payment {
     display: flex;

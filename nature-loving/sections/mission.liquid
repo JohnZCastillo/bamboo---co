@@ -1,17 +1,79 @@
 <div class="container">
   <div class="mission-wrapper">
-    <div>
-      <img src="{{ section.settings.background | image: width 300 }}">
+    <div class="mission-image-wrapper">
+      <img class="mission-image-wrapper-image" src="{{ section.settings.background | image_url: width: 300 }}">
+      <p class="mission-image-wrapper-fun-fact">{{ section.settings.fun_fact }}</p>
     </div>
     <div>
       <h2>
         {{ section.settings.header }}
       </h2>
       <p>{{ section.settings.paragraph }}</p>
+
+      <div class="mission-sub">
+        {% for mission in section.blocks %}
+          <div class="mission-sub-item">
+            <div class="mission-sub-heading">
+              <p class="mission-sub-heading-header">{{ mission.settings.icon }}</p>
+              <p class="mission-sub-heading-paragraph">{{ mission.settings.mission }}</p>
+            </div>
+            <p>{{ mission.settings.paragraph }}</p>
+          </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>
 
+{% stylesheet %}
+  .mission-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .mission-image-wrapper {
+    position: relative;
+  }
+
+  .mission-image-wrapper-image {
+    width: 100%;
+  }
+
+  .mission-image-wrapper-fun-fact {
+    position: absolute;
+    bottom: 0px;
+    right: 30px;
+    background-color: #d4a574;
+    padding: 48px;
+    max-width: 320px;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .mission-sub {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .mission-sub-heading {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 3px;
+  }
+
+  .mission-sub-heading-header {
+    color: #1a1c19;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .mission-sub-heading-paragraph {
+    color: #50453b;
+    font-size: 16px;
+  }
+{% endstylesheet %}
 {% schema %}
 {
   "name": "Mission",
@@ -35,6 +97,29 @@
       "type": "image_picker",
       "id": "background",
       "label": "Background"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Mission",
+      "type": "mission",
+      "settings": [
+        {
+          "type": "text",
+          "id": "mission",
+          "label": "Mission"
+        },
+        {
+          "type": "text",
+          "id": "paragraph",
+          "label": "Paragraph"
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon"
+        }
+      ]
     }
   ]
 }

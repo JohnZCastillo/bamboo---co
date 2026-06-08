@@ -13,56 +13,59 @@
       "type": "hero",
       "settings": {
         "header": "Sustainable Living, Naturally",
-        "paragraph": "Experience the quiet elegance of bamboo. Our curated collection brings intentional design and environmental stewardship into the heart of your home.",
         "tagline": "EARTH-FRIENDLY EXCELLENCE",
+        "paragraph": "Experience the quiet elegance of bamboo. Our curated collection brings intentional design and environmental stewardship into the heart of your home."
       }
     },
     "category": {
       "type": "category",
-      "settings": {
-        "header": "Explore by Category",
-        "tagline": "View all Categories",
-      },
       "blocks": {
         "category_1": {
           "type": "category",
           "settings": {
             "header": "Kitch & Dining",
-            "tagline": "Elevate every meal"
+            "tagline": "Elevate every meal",
+            "action": ""
           }
         },
         "category_2": {
           "type": "category",
           "settings": {
             "header": "Bath & Personal Care",
-            "tagline": "Rituals of restoration"
+            "tagline": "Rituals of restoration",
+            "action": ""
           }
         },
         "category_3": {
           "type": "category",
           "settings": {
             "header": "Home & Organization",
-            "tagline": "Order in the everyday"
+            "tagline": "Order in the everyday",
+            "action": ""
           }
         }
       },
       "block_order": [
         "category_1",
         "category_2",
-        "category_3",
-      ]
+        "category_3"
+      ],
+      "settings": {
+        "header": "Explore by Category",
+        "tagline": "View all Categories",
+        "paragraph": "",
+        "product_list": []
+      }
     },
     "best-seller": {
       "type": "best-seller",
-      "settings": {
-        "header": "Bestsellers",
-      },
       "blocks": {
         "category_1": {
           "type": "category",
           "settings": {
             "header": "Kitchen & Dining",
             "price": 500,
+            "action": ""
           }
         },
         "category_2": {
@@ -70,6 +73,7 @@
           "settings": {
             "header": "Bath & Personal Care",
             "price": 500,
+            "action": ""
           }
         },
         "category_3": {
@@ -77,19 +81,82 @@
           "settings": {
             "header": "Home & Organization",
             "price": 500,
+            "action": ""
           }
         }
       },
       "block_order": [
         "category_1",
         "category_2",
-        "category_3",
-      ]
+        "category_3"
+      ],
+      "settings": {
+        "header": "Bestsellers",
+        "collection": ""
+      }
+    },
+    "mission": {
+      "type": "mission",
+      "blocks": {
+        "mission_1": {
+          "type": "mission",
+          "settings": {
+            "mission": "100% Biodegradable",
+            "paragraph": "Materials that return gently to the earth.",
+            "icon": "icon"
+          }
+        },
+        "mission_2": {
+          "type": "mission",
+          "settings": {
+            "mission": "Low Water Impact",
+            "paragraph": "Requires far less water than traditional wood.",
+            "icon": "icon"
+          }
+        },
+        "mission_3": {
+          "type": "mission",
+          "settings": {
+            "mission": "Fast Regeneration",
+            "paragraph": "Harvested responsibly without deforestation.",
+            "icon": "icon"
+          }
+        },
+        "mission_4": {
+          "type": "mission",
+          "settings": {
+            "mission": "Artisan Crafted",
+            "paragraph": "Ethically made by master bamboo weavers.",
+            "icon": "icon"
+          }
+        }
+      },
+      "block_order": [
+        "mission_1",
+        "mission_2",
+        "mission_3",
+        "mission_4"
+      ],
+      "settings": {
+        "header": "Our Mission: Growth with Intention",
+        "paragraph": "At Bamboo & Co., we believe that beautiful homes shouldn't come at a cost to our planet. We've chosen bamboo not just for its exquisite natural grain, but for its unparalleled sustainability.",
+        "fun_fact": "\"Bamboo grows up to 3 feet in a single day, making it one of Earth's most renewable resources.\"",
+        "background": "shopify://shop_images/AB6AXuD_hjiCNuBRDYbe3iE76zoeOgRcHJc_fNFeWbYl17J818rVo1w03VI8mK0nAhwbCeAjp4PK6DloBSyjwTqsVVOWqdNLzsabtvAQt7jOgf51ytWyZQb04uavNKi6HRmCmnh_sLCCemdA7B7i2t5roDxli7E8LfjA0JIof5BZDmWgXBtHcp7.png"
+      }
+    },
+    "socials": {
+      "type": "socials",
+      "settings": {
+        "header": "Living with Intention",
+        "paragraph": "Follow us @bambooandco for daily inspiration"
+      }
     }
   },
   "order": [
     "hero",
     "category",
-    "best-seller"
+    "best-seller",
+    "mission",
+    "socials"
   ]
 }
