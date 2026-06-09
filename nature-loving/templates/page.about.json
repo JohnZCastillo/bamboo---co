@@ -1,0 +1,48 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "about-us-hero",
+      "settings": {
+        "header": "Cultivating a Future Rooted in Nature",
+        "tagline": "Discover the intentional design and sustainable heart of Bamboo & Co."
+      }
+    },
+    "mission": {
+      "type": "about-mission",
+      "settings": {
+        "header": "Our Mission",
+        "sub_heading": "INTENTIONAL LIVING",
+        "paragraph": "At Bamboo & Co., we believe that modern luxury should never come at the cost of our planet. Our journey began with a simple question: How can we create products that are both aesthetically sophisticated and fundamentally earth-friendly? </br> </br> We curate sustainable lifestyle essentials that bridge the gap between traditional Philippine craftsmanship and minimalist global design. Every piece we offer is a testament to the belief that beauty lies in simplicity and responsibility."
+      }
+    },
+    "why-bamboo": {
+      "type": "about-bamboo",
+      "settings": {
+        "header": "Why Bamboo?",
+        "paragraph": "The world's most versatile and renewable resource."
+      }
+    },
+    "journey": {
+      "type": "about-journey",
+      "settings": {
+        "header": "Why Bamboo?",
+        "paragraph": "The world's most versatile and renewable resource."
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "mission",
+    "why-bamboo",
+    "journey"
+  ]
+}

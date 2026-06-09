@@ -1,0 +1,55 @@
+<div class="wrapper  full-width">
+  <div
+    class="about-wrapper"
+  >
+    <div>
+      <p class="">{{ section.settings.sub_heading }}</p>
+      <h1 class="">{{ section.settings.header }}</h1>
+      <p class="">{{ section.settings.paragraph }}</p>
+    </div>
+    <div>
+      <img src="{{ section.settings.image | image_url: width: 1920 }}">
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .about-background {
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+  }
+
+  .about-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Header"
+    },
+    {
+      "type": "text",
+      "id": "sub_heading",
+      "label": "Sub Heading"
+    },
+    {
+      "type": "text",
+      "id": "paragraph",
+      "label": "Paragraph"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "image"
+    }
+  ]
+}
+{% endschema %}

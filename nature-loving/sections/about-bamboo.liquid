@@ -1,0 +1,40 @@
+<div class="wrapper  full-width">
+  <div class="bamboo-heading">
+    <h1 class="">{{ section.settings.header }}</h1>
+    <p class="">{{ section.settings.paragraph }}</p>
+  </div>
+  <div class="bamboo-body"></div>
+</div>
+
+{% stylesheet %}
+  .bamboo-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .bamboo-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Header"
+    },
+    {
+      "type": "text",
+      "id": "paragraph",
+      "label": "Paragraph"
+    }
+  ]
+}
+{% endschema %}

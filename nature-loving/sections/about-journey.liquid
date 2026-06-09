@@ -1,0 +1,105 @@
+<div class="wrapper  full-width">
+  <div class="journey-wrapper">
+    <div class="journey-heading">
+      <h1 class="">{{ section.settings.header }}</h1>
+    </div>
+    <div class="bamboo-body">
+      <div class="bamboo-body-item">
+        <p class="bamboo-body-item-year">2019</p>
+        <h1>The Seed is Planted</h1>
+        <p>
+          Founder Mateo Reyes discovers forgotten bamboo weaving techniques in the hills of Negros Occidental, sparking
+          the idea for Bamboo & Co.
+        </p>
+      </div>
+      <div class="bamboo-body-item">
+        <p class="bamboo-body-item-year">2020</p>
+        <h1>Sustainable Launch</h1>
+        <p>
+          Despite global challenges, we launched our first collection of home essentials, partnering with 12 local
+          artisan families.
+        </p>
+      </div>
+      <div class="bamboo-body-item">
+        <p class="bamboo-body-item-year">2024</p>
+        <h1>A Modern Showroom</h1>
+        <p>
+          We opened our flagship experience center in BGC, Taguig, bringing the serenity of the bamboo forest to the
+          urban heart of Manila.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .journey-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bamboo-body {
+    display: flex;
+    flex-direction: column;
+    padding-inline: 100px;
+  }
+
+  .bamboo-body-item {
+    border-left: solid 1px black;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .bamboo-body-item-year::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    padding: 5px;
+    background-color: #7c572d;
+    border-radius: 15px;
+    border: solid 5px white;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Header"
+    },
+    {
+      "type": "text",
+      "id": "paragraph",
+      "label": "Paragraph"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "journey",
+      "name": "journey",
+      "settings": [
+        {
+          "type": "number",
+          "id": "year",
+          "label": "Year"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "paragraph",
+          "label": "Paragraph"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

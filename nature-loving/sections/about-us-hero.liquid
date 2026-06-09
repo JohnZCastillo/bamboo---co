@@ -1,0 +1,54 @@
+<div
+  class="wrapper full-width mission-background"
+  {% if section.settings.background %}
+    style="background-image: url('{{ section.settings.background | image_url: width: 1920 }}')"
+  {% else %}
+    style="background-image: url('{{ 'hero.png' | asset_url }}')"
+  {% endif %}
+>
+  <div
+    class="about-us-wrapper"
+  >
+    <h1>{{ section.settings.header }}</h1>
+    <p>{{ section.settings.tagline }}</p>
+  </div>
+</div>
+
+{% stylesheet %}
+  .mission-background {
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+  }
+
+  .about-us-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Header"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline"
+    },
+    {
+      "type": "image_picker",
+      "id": "background",
+      "label": "Background"
+    }
+  ]
+}
+{% endschema %}

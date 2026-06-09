@@ -5,37 +5,121 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
+<div class="container">
+  <h1>{{ collection.title }}</h1>
+  <p>
+    Discover our curated collection of sustainable home essentials, thoughtfully designed to bring intentionality and
+    natural warmth into your daily rituals.
+  </p>
 
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
+  <div class="collection-body">
+    <div>
+      <h2>Categories</h2>
+      <div class="category-collection">
+        {% for category in collections %}
+          <form>
+            <input type="checkbox">
+            <label>{{ category.title }}</label>
+          </form>
+        {% endfor %}
       </div>
-    {% endfor %}
+    </div>
+    <div class="collection-products">
+      {% paginate collection.products by 20 %}
+        {% for product in collection.products %}
+          <div class="collection-product">
+            {% if product.featured_image %}
+              {% render 'image',
+                class: 'collection-product__image',
+                image: product.featured_image,
+                url: product.url,
+                width: 100,
+                height: 100,
+                crop: 'center'
+              %}
+            {% endif %}
+            <div class="product-details">
+              <p class="product-name">{{ product.title | escape | link_to: product.url }}</p>
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
+              <div class="product-action">
+                <p class="product-price">{{ product.price | money }}</p>
+                <form action="/cart/add" method="post" id="product-form-{{ product.id }}">
+                  <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                  <div>
+                    <button class="product-cta" type="submit" name="add">Add</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        {{ paginate | default_pagination }}
+      {% endpaginate %}
+    </div>
+  </div>
 </div>
 
 {% stylesheet %}
   .collection-products {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  }
+
+  .collection-body {
+    display: grid;
+    grid-template-columns: 200px auto;
+  }
+
+  .category-collection {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .collection-products {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    justify-content: stretch;
+  }
+
+  .product-name > a {
+    font-size: 24px;
+    color: #1a1c19 !important;
+    text-decoration: none !important;
+  }
+
+  .product-details {
+    padding-inline: 10px;
+    padding-block: 5px;
+  }
+
+  .collection-product {
+    border: solid 1px black;
+  }
+
+  .product-action {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #7c572d;
+  }
+
+  .product-cta {
+    padding-inline: 24px;
+    padding-block: 12px;
+    background-color: #4a6546;
+    border-radius: 8px;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    color: white;
+    font-size: 14px;
   }
 {% endstylesheet %}
 
