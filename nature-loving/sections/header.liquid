@@ -5,7 +5,13 @@
 
   <div class="header__menu">
     {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
+      <a
+        href="{{ link.url }}"
+        class="header__nav-link{% if link.active %} header__nav-link--active{% endif %}"
+        {% if link.active %}aria-current="page"{% endif %}
+      >
+        {{ link.title }}
+      </a>
     {% endfor %}
   </div>
 
@@ -54,6 +60,27 @@
   header .header__icons {
     display: flex;
     gap: 1rem;
+  }
+
+  .header__nav-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-foreground);
+    text-decoration: none;
+    padding-bottom: 3px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .header__nav-link:hover {
+    color: #4a6546;
+    border-bottom-color: #4a6546;
+  }
+
+  .header__nav-link--active {
+    color: #4a6546;
+    font-weight: 700;
+    border-bottom-color: #4a6546;
   }
 {% endstylesheet %}
 

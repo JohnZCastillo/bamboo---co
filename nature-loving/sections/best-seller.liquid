@@ -1,98 +1,302 @@
-{% comment %}
-  <pre>{{ product | json }}</pre>
-  <script>
-    console.log('Debug Product Object:', {{ collections['best-seller'].products | json }});
-  </script>
-{% endcomment %}
-
-<div class="full-width container product-container">
-  <div class="product-wrapper">
-    <div class="product-header">
-      <h2>{{ section.settings.header }}</h2>
-      <a class="normal-link" href="{{ section.settings.product_list }}">{{ section.settings.tagline }}</a>
-    </div>
-
-    <div class="product-list">
-      {% assign current_collection = section.settings.collection | default: collections['best-seller'] %}
-      {% for product in current_collection.products %}
-        <div
-          class="product-item"
+<div class="bestseller-section full-width container">
+  <div class="bestseller-head">
+    <h2 class="bestseller-head__title">{{ section.settings.header }}</h2>
+    <div class="bestseller-head__nav" aria-label="Scroll products">
+      <button class="bestseller-nav-btn" id="bs-prev" aria-label="Previous products" type="button">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          aria-hidden="true"
         >
-          <img
-            class="product-item-image"
-            src="{{ product.featured_image | image_url: width: 600 }}"
-            alt="{{ product.featured_image.alt | escape }}"
-          >
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <button class="bestseller-nav-btn" id="bs-next" aria-label="Next products" type="button">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </button>
+    </div>
+  </div>
 
-          <h3 class="product-item-header">{{ product.title }}</h3>
-
-          <div class="best">
-            <p class="product-item-price">{{ product.price | money }}</p>
-            <form action="/cart/add" method="post" id="product-form-{{ product.id }}">
-              <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-              <div>
-                <button type="submit" name="add">Add to cart</button>
+  <div class="bestseller-track-wrap">
+    <div class="bestseller-track" id="bs-track">
+      {% assign bs_collection = section.settings.collection | default: collections['best-seller'] %}
+      {% if bs_collection.products.size > 0 %}
+        {% for product in bs_collection.products %}
+          <div class="bs-card">
+            <a href="{{ product.url }}" class="bs-card__image-link" tabindex="-1" aria-hidden="true">
+              <div class="bs-card__image-wrap">
+                {% if product.featured_image %}
+                  <img
+                    class="bs-card__image"
+                    src="{{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' }}"
+                    alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                    width="300"
+                    height="300"
+                    loading="lazy"
+                  >
+                {% else %}
+                  <div class="bs-card__image bs-card__image--placeholder">
+                    {{ 'product-1' | placeholder_svg_tag: 'bs-card__placeholder-svg' }}
+                  </div>
+                {% endif %}
               </div>
-            </form>
+            </a>
+
+            <div class="bs-card__info">
+              <a href="{{ product.url }}" class="bs-card__title">{{ product.title }}</a>
+              <div class="bs-card__bottom">
+                <span class="bs-card__price">{{ product.price | money }}</span>
+                <form action="{{ routes.cart_add_url }}" method="post" id="bs-form-{{ product.id }}">
+                  <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                  <button
+                    type="submit"
+                    name="add"
+                    class="bs-card__add-btn"
+                    {% unless product.available %}
+                      disabled
+                    {% endunless %}
+                  >
+                    {% if product.available %}Add to cart{% else %}Sold out{% endif %}
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
-        </div>
-      {% endfor %}
+        {% endfor %}
+      {% else %}
+        {%- comment -%} Placeholder cards when no collection is assigned {%- endcomment -%}
+        {% for i in (1..4) %}
+          <div class="bs-card bs-card--placeholder">
+            <div class="bs-card__image-wrap">
+              {{ 'product-' | append: i | placeholder_svg_tag: 'bs-card__placeholder-svg' }}
+            </div>
+            <div class="bs-card__info">
+              <span class="bs-card__title">Sample Product {{ i }}</span>
+              <div class="bs-card__bottom">
+                <span class="bs-card__price">₱0.00</span>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
     </div>
   </div>
 </div>
 
+<script>
+  (function () {
+    var track = document.getElementById('bs-track');
+    var prev = document.getElementById('bs-prev');
+    var next = document.getElementById('bs-next');
+    if (!track || !prev || !next) return;
+
+    var scrollAmount = function () {
+      var card = track.querySelector('.bs-card');
+      return card ? card.offsetWidth + 20 : 320;
+    };
+
+    prev.addEventListener('click', function () {
+      track.scrollBy({ left: -scrollAmount(), behavior: 'smooth' });
+    });
+
+    next.addEventListener('click', function () {
+      track.scrollBy({ left: scrollAmount(), behavior: 'smooth' });
+    });
+  })();
+</script>
+
 {% stylesheet %}
-  .product-item-image {
-    border-radius: 5px;
-    margin-bottom: 10px;
-    width: 300px;
-    height: 300px;
-    overflow: hidden;
+  .bestseller-section {
+    padding-block: 72px;
   }
 
-  .product-container {
-    padding-block: 80px;
-  }
-
-  .product-header {
+  /* ── Section header ── */
+  .bestseller-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 48px;
+    margin-bottom: 32px;
   }
 
-  .product-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 20px;
-  }
-
-  .product-item {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    justify-content: end;
-    height: 300px;
-    border-radius: 10px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: bottom;
-  }
-
-  .product-item-header {
-    font-size: 18px;
-    font-weight: 400;
+  .bestseller-head__title {
+    font-size: 22px;
+    font-weight: 700;
     color: #1a1c19;
   }
 
-  .product-item-price {
-    font-size: 14px;
-    color: #7c572d;
+  .bestseller-head__nav {
+    display: flex;
+    gap: 8px;
   }
 
-  @media (max-width: 1100px) {
-    .highlights {
-      grid-template-columns: 1fr;
+  .bestseller-nav-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #374151;
+    transition: background-color 0.15s, border-color 0.15s;
+  }
+
+  .bestseller-nav-btn:hover {
+    background-color: #f3f4f0;
+    border-color: #9ca3af;
+  }
+
+  /* ── Scrollable track ── */
+  .bestseller-track-wrap {
+    overflow: hidden;
+  }
+
+  .bestseller-track {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  /* ── Product card ── */
+  .bs-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .bs-card__image-link {
+    display: block;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f3f4f0;
+  }
+
+  .bs-card__image-wrap {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f3f4f0;
+    border-radius: 10px;
+  }
+
+  .bs-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .bs-card__image-link:hover .bs-card__image {
+    transform: scale(1.04);
+  }
+
+  .bs-card__image--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .bs-card__placeholder-svg {
+    width: 60%;
+    height: 60%;
+    color: #9ca3af;
+  }
+
+  /* Card info */
+  .bs-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .bs-card__title {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a1c19;
+    text-decoration: none;
+    line-height: 1.3;
+  }
+
+  .bs-card__title:hover {
+    color: #c8a96e;
+  }
+
+  .bs-card__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .bs-card__price {
+    font-size: 14px;
+    font-weight: 600;
+    color: #c8a96e;
+  }
+
+  .bs-card__add-btn {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #7c572d;
+    background: transparent;
+    border: 1px solid #d4a574;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s, color 0.15s;
+  }
+
+  .bs-card__add-btn:hover:not(:disabled) {
+    background-color: #d4a574;
+    color: #ffffff;
+  }
+
+  .bs-card__add-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .bestseller-track {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 540px) {
+    .bestseller-section {
+      padding-block: 48px;
+    }
+
+    .bestseller-track {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
     }
   }
 {% endstylesheet %}
@@ -104,7 +308,8 @@
     {
       "type": "text",
       "id": "header",
-      "label": "Header"
+      "label": "Section heading",
+      "default": "Bestsellers"
     },
     {
       "type": "collection",
@@ -112,33 +317,8 @@
       "label": "Collection"
     }
   ],
-  "blocks": [
-    {
-      "name": "category",
-      "type": "category",
-      "settings": [
-        {
-          "type": "text",
-          "id": "header",
-          "label": "Header"
-        },
-        {
-          "type": "number",
-          "id": "price",
-          "label": "Price"
-        },
-        {
-          "type": "image_picker",
-          "id": "background",
-          "label": "Background"
-        },
-        {
-          "type": "url",
-          "id": "action",
-          "label": "Action"
-        }
-      ]
-    }
-  ]
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

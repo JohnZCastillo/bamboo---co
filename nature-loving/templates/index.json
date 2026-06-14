@@ -14,7 +14,11 @@
       "settings": {
         "header": "Sustainable Living, Naturally",
         "tagline": "EARTH-FRIENDLY EXCELLENCE",
-        "paragraph": "Experience the quiet elegance of bamboo. Our curated collection brings intentional design and environmental stewardship into the heart of your home."
+        "paragraph": "Experience the quiet elegance of bamboo. Our curated collection brings intentional design and environmental stewardship into the heart of your home.",
+        "primary_label": "Shop Collection",
+        "primary_url": "",
+        "secondary_label": "Our Process",
+        "secondary_url": ""
       }
     },
     "category": {
@@ -53,43 +57,11 @@
       "settings": {
         "header": "Explore by Category",
         "tagline": "View all Categories",
-        "paragraph": "",
-        "product_list": []
+        "link": ""
       }
     },
     "best-seller": {
       "type": "best-seller",
-      "blocks": {
-        "category_1": {
-          "type": "category",
-          "settings": {
-            "header": "Kitchen & Dining",
-            "price": 500,
-            "action": ""
-          }
-        },
-        "category_2": {
-          "type": "category",
-          "settings": {
-            "header": "Bath & Personal Care",
-            "price": 500,
-            "action": ""
-          }
-        },
-        "category_3": {
-          "type": "category",
-          "settings": {
-            "header": "Home & Organization",
-            "price": 500,
-            "action": ""
-          }
-        }
-      },
-      "block_order": [
-        "category_1",
-        "category_2",
-        "category_3"
-      ],
       "settings": {
         "header": "Bestsellers",
         "collection": ""
@@ -148,7 +120,15 @@
       "type": "socials",
       "settings": {
         "header": "Living with Intention",
-        "paragraph": "Follow us @bambooandco for daily inspiration"
+        "paragraph": "Follow us @bambooandco for daily inspiration",
+        "image_1": "shopify://shop_images/Background_1.png",
+        "link_1": "",
+        "image_2": "shopify://shop_images/Background_2.png",
+        "link_2": "",
+        "image_3": "shopify://shop_images/Background_3.png",
+        "link_3": "",
+        "image_4": "shopify://shop_images/Background_4.png",
+        "link_4": ""
       }
     }
   },

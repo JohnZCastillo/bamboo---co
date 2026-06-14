@@ -13,7 +13,8 @@
       "type": "about-us-hero",
       "settings": {
         "header": "Cultivating a Future Rooted in Nature",
-        "tagline": "Discover the intentional design and sustainable heart of Bamboo & Co."
+        "tagline": "Discover the intentional design and sustainable heart of Bamboo & Co.",
+        "background": "shopify://shop_images/Group_2.png"
       }
     },
     "mission": {
@@ -21,11 +22,43 @@
       "settings": {
         "header": "Our Mission",
         "sub_heading": "INTENTIONAL LIVING",
-        "paragraph": "At Bamboo & Co., we believe that modern luxury should never come at the cost of our planet. Our journey began with a simple question: How can we create products that are both aesthetically sophisticated and fundamentally earth-friendly? </br> </br> We curate sustainable lifestyle essentials that bridge the gap between traditional Philippine craftsmanship and minimalist global design. Every piece we offer is a testament to the belief that beauty lies in simplicity and responsibility."
+        "paragraph": "At Bamboo & Co., we believe that modern luxury should never come at the cost of our planet. Our journey began with a simple question: How can we create products that are both aesthetically sophisticated and fundamentally earth-friendly?\n\nWe curate sustainable lifestyle essentials that bridge the gap between traditional Philippine craftsmanship and minimalist global design. Every piece we offer is a testament to the belief that beauty lies in simplicity and responsibility.",
+        "image": "shopify://shop_images/Overlay_Shadow.png"
       }
     },
     "why-bamboo": {
       "type": "about-bamboo",
+      "blocks": {
+        "feature-1": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/Icon.png",
+            "title": "Rapidly Renewable",
+            "text": "Bamboo grows up to 91 cm per day and is ready to harvest in 3–5 years — far faster than hardwood trees."
+          }
+        },
+        "feature-2": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/Icon_1.png",
+            "title": "Carbon Negative",
+            "text": "Bamboo absorbs more CO₂ and releases 35% more oxygen than an equivalent stand of trees."
+          }
+        },
+        "feature-3": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/Icon_2.png",
+            "title": "Incredibly Strong",
+            "text": "With a tensile strength rivaling steel, bamboo is lightweight yet durable for everyday use."
+          }
+        }
+      },
+      "block_order": [
+        "feature-1",
+        "feature-2",
+        "feature-3"
+      ],
       "settings": {
         "header": "Why Bamboo?",
         "paragraph": "The world's most versatile and renewable resource."
@@ -33,9 +66,67 @@
     },
     "journey": {
       "type": "about-journey",
+      "blocks": {
+        "block-1": {
+          "type": "journey",
+          "settings": {
+            "year": 2019,
+            "heading": "The Seed is Planted",
+            "paragraph": "Founder Mateo Reyes discovers forgotten bamboo weaving techniques in the hills of Negros Occidental, sparking the idea for Bamboo & Co."
+          }
+        },
+        "block-2": {
+          "type": "journey",
+          "settings": {
+            "year": 2020,
+            "heading": "Sustainable Launch",
+            "paragraph": "Despite global challenges, we launched our first collection of home essentials, partnering with 12 local artisan families."
+          }
+        },
+        "block-3": {
+          "type": "journey",
+          "settings": {
+            "year": 2024,
+            "heading": "A Modern Showroom",
+            "paragraph": "We opened our flagship experience center in BGC, Taguig, bringing the serenity of the bamboo forest to the urban heart of Manila."
+          }
+        }
+      },
+      "block_order": [
+        "block-1",
+        "block-2",
+        "block-3"
+      ],
       "settings": {
-        "header": "Why Bamboo?",
-        "paragraph": "The world's most versatile and renewable resource."
+        "header": "Our Journey"
+      }
+    },
+    "about-us": {
+      "type": "about-us",
+      "blocks": {
+        "location-1": {
+          "type": "location",
+          "settings": {
+            "label": "Flagship Store",
+            "address": "BGC, Taguig, Metro Manila\nOpen Mon–Sat, 10am–7pm"
+          }
+        },
+        "location-2": {
+          "type": "location",
+          "settings": {
+            "label": "Online",
+            "address": "hello@bambooandco.com"
+          }
+        }
+      },
+      "block_order": [
+        "location-1",
+        "location-2"
+      ],
+      "settings": {
+        "heading": "Visit Bamboo & Co.",
+        "form_heading": "Send us a message",
+        "submit_label": "Send Message"
       }
     }
   },
@@ -43,6 +134,7 @@
     "hero",
     "mission",
     "why-bamboo",
-    "journey"
+    "journey",
+    "about-us"
   ]
 }

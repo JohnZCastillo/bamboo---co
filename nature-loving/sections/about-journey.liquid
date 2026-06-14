@@ -1,87 +1,152 @@
-<div class="wrapper  full-width">
-  <div class="journey-wrapper">
-    <div class="journey-heading">
-      <h1 class="">{{ section.settings.header }}</h1>
+<div class="about-journey">
+  {% if section.settings.header != blank %}
+    <div class="about-journey__heading">
+      <h2 class="about-journey__title">{{ section.settings.header }}</h2>
     </div>
-    <div class="bamboo-body">
-      <div class="bamboo-body-item">
-        <p class="bamboo-body-item-year">2019</p>
-        <h1>The Seed is Planted</h1>
-        <p>
-          Founder Mateo Reyes discovers forgotten bamboo weaving techniques in the hills of Negros Occidental, sparking
-          the idea for Bamboo & Co.
-        </p>
-      </div>
-      <div class="bamboo-body-item">
-        <p class="bamboo-body-item-year">2020</p>
-        <h1>Sustainable Launch</h1>
-        <p>
-          Despite global challenges, we launched our first collection of home essentials, partnering with 12 local
-          artisan families.
-        </p>
-      </div>
-      <div class="bamboo-body-item">
-        <p class="bamboo-body-item-year">2024</p>
-        <h1>A Modern Showroom</h1>
-        <p>
-          We opened our flagship experience center in BGC, Taguig, bringing the serenity of the bamboo forest to the
-          urban heart of Manila.
-        </p>
-      </div>
-    </div>
-  </div>
+  {% endif %}
+
+  {% if section.blocks.size > 0 %}
+    <ol class="about-journey__timeline">
+      {% for block in section.blocks %}
+        {% if block.type == 'journey' %}
+          <li class="about-journey__item" {{ block.shopify_attributes }}>
+            <div class="about-journey__marker">
+              <span class="about-journey__dot"></span>
+            </div>
+            <div class="about-journey__body">
+              {% if block.settings.year != blank %}
+                <span class="about-journey__year">{{ block.settings.year }}</span>
+              {% endif %}
+              {% if block.settings.heading != blank %}
+                <h3 class="about-journey__item-title">{{ block.settings.heading }}</h3>
+              {% endif %}
+              {% if block.settings.paragraph != blank %}
+                <p class="about-journey__item-text">{{ block.settings.paragraph }}</p>
+              {% endif %}
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+  {% endif %}
 </div>
 
 {% stylesheet %}
-  .journey-heading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .about-journey {
+    padding-block: 72px;
+    padding-inline: var(--page-margin, 20px);
+    max-width: var(--page-width, 90rem);
+    margin-inline: auto;
   }
 
-  .bamboo-body {
+  .about-journey__heading {
+    text-align: center;
+    margin-bottom: 52px;
+  }
+
+  .about-journey__title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1c19;
+  }
+
+  .about-journey__timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 680px;
     display: flex;
     flex-direction: column;
-    padding-inline: 100px;
   }
 
-  .bamboo-body-item {
-    border-left: solid 1px black;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    position: relative;
+  .about-journey__item {
+    display: flex;
+    gap: 24px;
   }
 
-  .bamboo-body-item-year::before {
-    content: '';
-    position: absolute;
-    left: -10px;
-    padding: 5px;
+  .about-journey__marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+
+  .about-journey__dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
     background-color: #7c572d;
-    border-radius: 15px;
-    border: solid 5px white;
+    border: 3px solid #ffffff;
+    box-shadow: 0 0 0 2px #7c572d;
+    flex-shrink: 0;
+  }
+
+  .about-journey__item:not(:last-child) .about-journey__marker::after {
+    content: '';
+    flex: 1;
+    width: 2px;
+    background-color: #d4c8bb;
+    margin-top: 6px;
+    min-height: 32px;
+  }
+
+  .about-journey__body {
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .about-journey__item:last-child .about-journey__body {
+    padding-bottom: 0;
+  }
+
+  .about-journey__year {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #7c572d;
+  }
+
+  .about-journey__item-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a1c19;
+  }
+
+  .about-journey__item-text {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .about-journey {
+      padding-block: 48px;
+    }
+
+    .about-journey__title {
+      font-size: 24px;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Hero",
+  "name": "Our Journey",
   "settings": [
     {
       "type": "text",
       "id": "header",
       "label": "Header"
-    },
-    {
-      "type": "text",
-      "id": "paragraph",
-      "label": "Paragraph"
     }
   ],
   "blocks": [
     {
       "type": "journey",
-      "name": "journey",
+      "name": "Milestone",
       "settings": [
         {
           "type": "number",
@@ -94,12 +159,15 @@
           "label": "Heading"
         },
         {
-          "type": "text",
+          "type": "textarea",
           "id": "paragraph",
           "label": "Paragraph"
         }
       ]
     }
-  ]
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

@@ -9,16 +9,15 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "collections",
+    "impact": {
+      "type": "impact",
       "settings": {
-        "eyebrow": "THE CURATED HOME",
-        "heading": "Elevated Essentials for Conscious Living",
-        "description": "Discover our thoughtfully assembled collections, where modern Asian minimalism meets sustainable craftsmanship. Each piece is selected to bring a sense of calm, order, and organic warmth to your daily rituals."
+        "header": "Your Positive Ripple",
+        "tagline": "Every intentional choice flows outward, creating waves of change for our planet. See how your bamboo essentials shift the tide."
       }
     }
   },
   "order": [
-    "main"
+    "impact"
   ]
 }

@@ -1,0 +1,842 @@
+{% comment %}
+  Impact page section — "Your Positive Ripple"
+  Two-part layout:
+    1. Hero split: left copy + CTA buttons / right "Essentials Switch" calculator card
+    2. "Environmental Harvest" stats row (3 metric cards)
+{% endcomment %}
+
+{%- comment -%} ── Hero split ──────────────────────────────────────────── {%- endcomment -%}
+<div class="impact-hero">
+  {%- comment -%} Left: headline + description + CTAs {%- endcomment -%}
+  <div class="impact-hero__left">
+    <span class="impact-hero__eyebrow">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="#4a6546"
+        stroke="none"
+        aria-hidden="true"
+      >
+        <path d="M17 8C8 10 5.9 16.17 3.82 20.32L5.71 21l1-2.3A4.49 4.49 0 0 0 8 19c9-3 11.19-10 12.25-14.71L19 4 17 8z"/>
+      </svg>
+      {{ section.settings.eyebrow | default: 'Sustainability Journey' }}
+    </span>
+
+    <h1 class="impact-hero__title">{{ section.settings.header | default: 'Your Positive Ripple' }}</h1>
+
+    <p class="impact-hero__tagline">
+      {{
+        section.settings.tagline
+        | default: 'Every intentional choice flows outward, creating waves of change for our planet. See how your bamboo essentials shift the tide.'
+      }}
+    </p>
+
+    <div class="impact-hero__ctas">
+      <a
+        href="{{ section.settings.primary_cta_url | default: '/collections/all' }}"
+        class="impact-cta impact-cta--primary"
+      >
+        {{ section.settings.primary_cta_label | default: 'Start Shopping' }}
+      </a>
+      <button type="button" class="impact-cta impact-cta--secondary" onclick="shareImpact()">
+        {{ section.settings.secondary_cta_label | default: 'Share My Impact' }}
+      </button>
+    </div>
+  </div>
+
+  {%- comment -%} Right: Essentials Switch calculator card {%- endcomment -%}
+  <div class="impact-hero__right">
+    <div class="switch-card">
+      <h2 class="switch-card__title">{{ section.settings.calculator_title | default: 'Essentials Switch' }}</h2>
+
+      <div class="switch-card__sliders">
+        <div class="switch-row">
+          <label class="switch-row__label" for="slider-toothbrushes">
+            {{ section.settings.item1_label | default: 'Bamboo Toothbrushes' }}
+          </label>
+          <input
+            type="range"
+            id="slider-toothbrushes"
+            class="switch-slider"
+            min="0"
+            max="24"
+            value="{{ section.settings.item1_default | default: 12 }}"
+            data-multiplier="{{ section.settings.item1_multiplier | default: 2 }}"
+          >
+          <span class="switch-row__value" id="val-toothbrushes">
+            {{- section.settings.item1_default | default: 12 -}}
+          </span>
+        </div>
+
+        <div class="switch-row">
+          <label class="switch-row__label" for="slider-utensils">
+            {{ section.settings.item2_label | default: 'Utensil Sets' }}
+          </label>
+          <input
+            type="range"
+            id="slider-utensils"
+            class="switch-slider"
+            min="0"
+            max="20"
+            value="{{ section.settings.item2_default | default: 4 }}"
+            data-multiplier="{{ section.settings.item2_multiplier | default: 10 }}"
+          >
+          <span class="switch-row__value" id="val-utensils">{{ section.settings.item2_default | default: 4 }}</span>
+        </div>
+
+        <div class="switch-row">
+          <label class="switch-row__label" for="slider-containers">
+            {{ section.settings.item3_label | default: 'Food Containers' }}
+          </label>
+          <input
+            type="range"
+            id="slider-containers"
+            class="switch-slider"
+            min="0"
+            max="24"
+            value="{{ section.settings.item3_default | default: 8 }}"
+            data-multiplier="{{ section.settings.item3_multiplier | default: 5 }}"
+          >
+          <span class="switch-row__value" id="val-containers">{{ section.settings.item3_default | default: 8 }}</span>
+        </div>
+      </div>
+
+      <div class="switch-card__result">
+        <span class="switch-card__result-icon" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#4a6546"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </span>
+        <div>
+          <p class="switch-card__result-label">POTENTIAL IMPACT</p>
+          <p class="switch-card__result-text">
+            Equivalent to <strong id="impact-total">450</strong> plastic items diverted annually.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ── Environmental Harvest ────────────────────────────────── {%- endcomment -%}
+<div class="harvest-section">
+  <div class="harvest-section__header">
+    <h2 class="harvest-section__title">{{ section.settings.harvest_title | default: 'Environmental Harvest' }}</h2>
+    <p class="harvest-section__subtitle">
+      {{ section.settings.harvest_subtitle | default: 'Real-time metrics of your contribution to the ecosystem.' }}
+    </p>
+  </div>
+
+  <div class="harvest-grid">
+    {%- comment -%} Card 1 — Plastic Bottles {%- endcomment -%}
+    <div class="harvest-card">
+      <div class="harvest-card__top">
+        <span class="harvest-card__icon harvest-card__icon--leaf" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="#4a6546"
+            stroke="none"
+          >
+            <path d="M17 8C8 10 5.9 16.17 3.82 20.32L5.71 21l1-2.3A4.49 4.49 0 0 0 8 19c9-3 11.19-10 12.25-14.71L19 4 17 8z"/>
+          </svg>
+        </span>
+        <span class="harvest-card__badge">{{ section.settings.stat1_badge | default: '+24% this month' }}</span>
+      </div>
+      <p class="harvest-card__label">{{ section.settings.stat1_label | default: 'Plastic Bottles Saved' }}</p>
+      <p class="harvest-card__value">{{ section.settings.stat1_value | default: '2,481' }}</p>
+      <p class="harvest-card__desc">
+        {{ section.settings.stat1_desc | default: 'Prevented from entering marine ecosystems.' }}
+      </p>
+    </div>
+
+    {%- comment -%} Card 2 — Carbon Offset {%- endcomment -%}
+    <div class="harvest-card">
+      <div class="harvest-card__top">
+        <span class="harvest-card__icon harvest-card__icon--cloud" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="#4a6546"
+            stroke="none"
+          >
+            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+          </svg>
+        </span>
+        <span class="harvest-card__badge">{{ section.settings.stat2_badge | default: 'Top 5% contributor' }}</span>
+      </div>
+      <p class="harvest-card__label">{{ section.settings.stat2_label | default: 'Carbon Offset (kg)' }}</p>
+      <p class="harvest-card__value">{{ section.settings.stat2_value | default: '156.4' }}</p>
+      <p class="harvest-card__desc">
+        {{ section.settings.stat2_desc | default: 'Carbon neutral shipping & sustainable production.' }}
+      </p>
+    </div>
+
+    {%- comment -%} Card 3 — Groves Supported {%- endcomment -%}
+    <div class="harvest-card">
+      <div class="harvest-card__top">
+        <span class="harvest-card__icon harvest-card__icon--grove" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="#c8a96e"
+            stroke="none"
+          >
+            <path d="M12 2L8 9H4l4 3-1.5 5L12 14l5.5 3L16 12l4-3h-4L12 2z"/>
+          </svg>
+        </span>
+        <span class="harvest-card__badge">{{ section.settings.stat3_badge | default: 'Active groves' }}</span>
+      </div>
+      <p class="harvest-card__label">{{ section.settings.stat3_label | default: 'Groves Supported' }}</p>
+      <p class="harvest-card__value">{{ section.settings.stat3_value | default: '12' }}</p>
+      <p class="harvest-card__desc">
+        {{ section.settings.stat3_desc | default: 'Directly contributing to bamboo reforestation.' }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var sliders = document.querySelectorAll('.switch-slider');
+    var totalEl = document.getElementById('impact-total');
+
+    // Map slider id → query param key (match on id ending, not full id)
+    var paramMap = {
+      'slider-toothbrushes': 't',
+      'slider-utensils':     'u',
+      'slider-containers':   'c'
+    };
+
+    // Resolve param key from a slider element regardless of id prefix
+    function getParamKey(s) {
+      for (var key in paramMap) {
+        if (s.id === key || s.id.endsWith('-' + key)) return paramMap[key];
+      }
+      // fallback: use the last segment of the id
+      var bare = s.id.replace(/^.*slider-/, 'slider-');
+      return paramMap[bare] || null;
+    }
+
+    // Find the sibling value display span inside the same .switch-row
+    function getValEl(s) {
+      var row = s.closest('.switch-row');
+      return row ? row.querySelector('.switch-row__value') : null;
+    }
+
+    // ── Read query params on load and seed sliders ──────────
+    function loadFromParams() {
+      var params = new URLSearchParams(window.location.search);
+      sliders.forEach(function (s) {
+        var key = getParamKey(s);
+        if (key && params.has(key)) {
+          var val = parseInt(params.get(key), 10);
+          val = Math.max(parseInt(s.min, 10), Math.min(parseInt(s.max, 10), val));
+          s.value = val;
+          var valEl = getValEl(s);
+          if (valEl) valEl.textContent = val;
+        }
+      });
+    }
+
+    // ── Write current slider values to URL params ───────────
+    function syncParams() {
+      var params = new URLSearchParams(window.location.search);
+      sliders.forEach(function (s) {
+        var key = getParamKey(s);
+        if (key) params.set(key, s.value);
+      });
+      window.history.replaceState(null, '', window.location.pathname + '?' + params.toString());
+    }
+
+    // ── Recalculate impact total ────────────────────────────
+    function recalc() {
+      var total = 0;
+      sliders.forEach(function (s) {
+        total += parseInt(s.value, 10) * parseInt(s.dataset.multiplier, 10);
+      });
+      if (totalEl) totalEl.textContent = total.toLocaleString();
+    }
+
+    // ── Wire up slider events ───────────────────────────────
+    sliders.forEach(function (s) {
+      s.addEventListener('input', function () {
+        var valEl = getValEl(s);
+        if (valEl) valEl.textContent = s.value;
+        recalc();
+        syncParams();
+      });
+    });
+
+    // ── Init ────────────────────────────────────────────────
+    loadFromParams();
+    recalc();
+    syncParams();
+  })();
+
+  function shareImpact() {
+    var url   = window.location.href;
+    var total = document.getElementById('impact-total');
+    var text  = "I've helped divert " + (total ? total.textContent : '0') +
+                ' plastic items annually with bamboo essentials! ' + url;
+
+    if (navigator.share) {
+      navigator.share({ title: 'My Positive Ripple', text: text, url: url });
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function () {
+        alert('Link copied to clipboard! Share it to show your impact.');
+      });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      alert('Link copied to clipboard! Share it to show your impact.');
+    }
+  }
+</script>
+
+{% stylesheet %}
+  /* ── Shared page padding ──────────────────────────────────── */
+  .impact-hero,
+  .harvest-section {
+    padding-inline: 57px;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     HERO SPLIT
+  ══════════════════════════════════════════════════════════ */
+  .impact-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    padding-block: 56px 48px;
+  }
+
+  /* Left */
+  .impact-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #4a6546;
+    background-color: #e6ede5;
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+
+  .impact-hero__title {
+    font-size: 40px;
+    font-weight: 700;
+    color: #7c572d;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+
+  .impact-hero__tagline {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.7;
+    max-width: 400px;
+    margin-bottom: 32px;
+  }
+
+  .impact-hero__ctas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .impact-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .impact-cta--primary {
+    background-color: #7c572d;
+    color: #ffffff;
+    border: 2px solid #7c572d;
+  }
+
+  .impact-cta--primary:hover {
+    background-color: #6a4824;
+    border-color: #6a4824;
+  }
+
+  .impact-cta--secondary {
+    background-color: transparent;
+    color: #1a1c19;
+    border: 2px solid #d1d5db;
+  }
+
+  .impact-cta--secondary:hover {
+    border-color: #9ca3af;
+  }
+
+  /* ── Switch Card ──────────────────────────────────────────── */
+  .switch-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .switch-card__title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1c19;
+    margin-bottom: 24px;
+  }
+
+  .switch-card__sliders {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .switch-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .switch-row__label {
+    font-size: 13px;
+    color: #374151;
+    white-space: nowrap;
+  }
+
+  /* Range slider */
+  .switch-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: #e5e7eb;
+    outline: none;
+    cursor: pointer;
+    grid-column: 1 / 2;
+  }
+
+  .switch-row {
+    grid-template-columns: 140px 1fr 28px;
+  }
+
+  .switch-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #7c572d;
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(124, 87, 45, 0.15);
+  }
+
+  .switch-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 50%;
+    background: #7c572d;
+    cursor: pointer;
+  }
+
+  .switch-row__value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #7c572d;
+    text-align: right;
+    min-width: 20px;
+  }
+
+  /* Result row */
+  .switch-card__result {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background-color: #f0f5f0;
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+
+  .switch-card__result-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #d4e8d4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .switch-card__result-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #9ca3af;
+    margin-bottom: 2px;
+  }
+
+  .switch-card__result-text {
+    font-size: 13px;
+    color: #1a1c19;
+    font-weight: 500;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     ENVIRONMENTAL HARVEST
+  ══════════════════════════════════════════════════════════ */
+  .harvest-section {
+    padding-block: 56px 64px;
+  }
+
+  .harvest-section__header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .harvest-section__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1c19;
+    margin-bottom: 8px;
+  }
+
+  .harvest-section__subtitle {
+    font-size: 14px;
+    color: #6b7280;
+  }
+
+  /* Stat cards grid */
+  .harvest-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .harvest-card {
+    background-color: #f3f4f0;
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .harvest-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .harvest-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+  }
+
+  .harvest-card__badge {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+  }
+
+  .harvest-card__label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-bottom: 4px;
+  }
+
+  .harvest-card__value {
+    font-size: 40px;
+    font-weight: 700;
+    color: #1a1c19;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .harvest-card__desc {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .impact-hero {
+      grid-template-columns: 1fr;
+    }
+
+    .harvest-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .impact-hero,
+    .harvest-section {
+      padding-inline: 16px;
+    }
+
+    .impact-hero__title {
+      font-size: 28px;
+    }
+
+    .harvest-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .switch-row {
+      grid-template-columns: 110px 1fr 28px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Impact",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero — Left"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow tag",
+      "default": "Sustainability Journey"
+    },
+    {
+      "type": "text",
+      "id": "header",
+      "label": "Headline",
+      "default": "Your Positive Ripple"
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Every intentional choice flows outward, creating waves of change for our planet. See how your bamboo essentials shift the tide."
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_label",
+      "label": "Primary button label",
+      "default": "Start Shopping"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_url",
+      "label": "Primary button URL"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_label",
+      "label": "Secondary button label",
+      "default": "Share My Impact"
+    },
+    {
+      "type": "header",
+      "content": "Hero — Essentials Switch card"
+    },
+    {
+      "type": "text",
+      "id": "calculator_title",
+      "label": "Card title",
+      "default": "Essentials Switch"
+    },
+    {
+      "type": "text",
+      "id": "item1_label",
+      "label": "Item 1 label",
+      "default": "Bamboo Toothbrushes"
+    },
+    {
+      "type": "range",
+      "id": "item1_default",
+      "label": "Item 1 default value",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "number",
+      "id": "item1_multiplier",
+      "label": "Item 1 plastic-items multiplier",
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "item2_label",
+      "label": "Item 2 label",
+      "default": "Utensil Sets"
+    },
+    {
+      "type": "range",
+      "id": "item2_default",
+      "label": "Item 2 default value",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "number",
+      "id": "item2_multiplier",
+      "label": "Item 2 plastic-items multiplier",
+      "default": 10
+    },
+    {
+      "type": "text",
+      "id": "item3_label",
+      "label": "Item 3 label",
+      "default": "Food Containers"
+    },
+    {
+      "type": "range",
+      "id": "item3_default",
+      "label": "Item 3 default value",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "number",
+      "id": "item3_multiplier",
+      "label": "Item 3 plastic-items multiplier",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Environmental Harvest"
+    },
+    {
+      "type": "text",
+      "id": "harvest_title",
+      "label": "Section title",
+      "default": "Environmental Harvest"
+    },
+    {
+      "type": "text",
+      "id": "harvest_subtitle",
+      "label": "Section subtitle",
+      "default": "Real-time metrics of your contribution to the ecosystem."
+    },
+    {
+      "type": "text",
+      "id": "stat1_badge",
+      "label": "Stat 1 badge",
+      "default": "+24% this month"
+    },
+    {
+      "type": "text",
+      "id": "stat1_label",
+      "label": "Stat 1 label",
+      "default": "Plastic Bottles Saved"
+    },
+    {
+      "type": "text",
+      "id": "stat1_value",
+      "label": "Stat 1 value",
+      "default": "2,481"
+    },
+    {
+      "type": "text",
+      "id": "stat1_desc",
+      "label": "Stat 1 description",
+      "default": "Prevented from entering marine ecosystems."
+    },
+    {
+      "type": "text",
+      "id": "stat2_badge",
+      "label": "Stat 2 badge",
+      "default": "Top 5% contributor"
+    },
+    {
+      "type": "text",
+      "id": "stat2_label",
+      "label": "Stat 2 label",
+      "default": "Carbon Offset (kg)"
+    },
+    {
+      "type": "text",
+      "id": "stat2_value",
+      "label": "Stat 2 value",
+      "default": "156.4"
+    },
+    {
+      "type": "text",
+      "id": "stat2_desc",
+      "label": "Stat 2 description",
+      "default": "Carbon neutral shipping & sustainable production."
+    },
+    {
+      "type": "text",
+      "id": "stat3_badge",
+      "label": "Stat 3 badge",
+      "default": "Active groves"
+    },
+    {
+      "type": "text",
+      "id": "stat3_label",
+      "label": "Stat 3 label",
+      "default": "Groves Supported"
+    },
+    {
+      "type": "text",
+      "id": "stat3_value",
+      "label": "Stat 3 value",
+      "default": "12"
+    },
+    {
+      "type": "text",
+      "id": "stat3_desc",
+      "label": "Stat 3 description",
+      "default": "Directly contributing to bamboo reforestation."
+    }
+  ]
+}
+{% endschema %}

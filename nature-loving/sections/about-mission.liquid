@@ -1,34 +1,87 @@
-<div class="wrapper  full-width">
-  <div
-    class="about-wrapper"
-  >
-    <div>
-      <p class="">{{ section.settings.sub_heading }}</p>
-      <h1 class="">{{ section.settings.header }}</h1>
-      <p class="">{{ section.settings.paragraph }}</p>
-    </div>
-    <div>
-      <img src="{{ section.settings.image | image_url: width: 1920 }}">
-    </div>
+<div class="about-mission">
+  <div class="about-mission__content">
+    {% if section.settings.sub_heading != blank %}
+      <p class="about-mission__eyebrow">{{ section.settings.sub_heading }}</p>
+    {% endif %}
+    {% if section.settings.header != blank %}
+      <h2 class="about-mission__heading">{{ section.settings.header }}</h2>
+    {% endif %}
+    {% if section.settings.paragraph != blank %}
+      <div class="about-mission__body">{{ section.settings.paragraph }}</div>
+    {% endif %}
   </div>
+  {% if section.settings.image != blank %}
+    <div class="about-mission__image">
+      <img
+        src="{{ section.settings.image | image_url: width: 800 }}"
+        alt="{{ section.settings.header | escape }}"
+        width="800"
+        height="600"
+        loading="lazy"
+      >
+    </div>
+  {% endif %}
 </div>
 
 {% stylesheet %}
-  .about-background {
-    background-repeat: no-repeat;
-    background-position: bottom;
-    background-size: cover;
-  }
-
-  .about-wrapper {
+  .about-mission {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    padding-block: 72px;
+    padding-inline: var(--page-margin, 20px);
+    max-width: var(--page-width, 90rem);
+    margin-inline: auto;
+  }
+
+  .about-mission__eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #7c572d;
+    margin-bottom: 12px;
+  }
+
+  .about-mission__heading {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #1a1c19;
+    margin-bottom: 20px;
+  }
+
+  .about-mission__body {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #4b5563;
+  }
+
+  .about-mission__image img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+  }
+
+  @media (max-width: 768px) {
+    .about-mission {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding-block: 48px;
+    }
+
+    .about-mission__heading {
+      font-size: 26px;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Hero",
+  "name": "About Mission",
   "settings": [
     {
       "type": "text",
@@ -41,15 +94,18 @@
       "label": "Sub Heading"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "paragraph",
       "label": "Paragraph"
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "image"
+      "label": "Image"
     }
-  ]
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

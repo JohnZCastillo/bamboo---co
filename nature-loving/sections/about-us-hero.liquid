@@ -1,38 +1,76 @@
 <div
-  class="wrapper full-width mission-background"
+  class="about-hero full-width"
   {% if section.settings.background %}
     style="background-image: url('{{ section.settings.background | image_url: width: 1920 }}')"
   {% else %}
     style="background-image: url('{{ 'hero.png' | asset_url }}')"
   {% endif %}
 >
-  <div
-    class="about-us-wrapper"
-  >
-    <h1>{{ section.settings.header }}</h1>
-    <p>{{ section.settings.tagline }}</p>
+  <div class="about-hero__inner">
+    {% if section.settings.header != blank %}
+      <h1 class="about-hero__heading">{{ section.settings.header }}</h1>
+    {% endif %}
+    {% if section.settings.tagline != blank %}
+      <p class="about-hero__tagline">{{ section.settings.tagline }}</p>
+    {% endif %}
   </div>
 </div>
 
 {% stylesheet %}
-  .mission-background {
-    background-repeat: no-repeat;
-    background-position: bottom;
-    background-size: cover;
-  }
-
-  .about-us-wrapper {
+  .about-hero {
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 500px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding-inline: var(--page-margin, 20px);
+  }
+
+  .about-hero__inner {
+    display: flex;
     flex-direction: column;
-    width: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 16px;
+    max-width: 680px;
+  }
+
+  .about-hero__heading {
+    font-size: 42px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.15;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  }
+
+  .about-hero__tagline {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.6;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    .about-hero {
+      min-height: 360px;
+    }
+
+    .about-hero__heading {
+      font-size: 28px;
+    }
+
+    .about-hero__tagline {
+      font-size: 14px;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Hero",
+  "name": "About Hero",
   "settings": [
     {
       "type": "text",
@@ -47,8 +85,11 @@
     {
       "type": "image_picker",
       "id": "background",
-      "label": "Background"
+      "label": "Background Image"
     }
-  ]
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

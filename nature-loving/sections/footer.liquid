@@ -1,102 +1,172 @@
-<footer class="container">
-  <div class="footer-top">
-    <di>
-      <p class="footer-top-heading company-name">
-        {{ shop.name }}
-      </p>
-      <div class="footer-top-bottom">
-        <p>Elevating the everyday through sustainable, artisan-crafted bamboo home goods.</p>
+<footer class="footer-wrapper">
+  <div class="footer-top container">
+
+    {%- comment -%} Brand column {%- endcomment -%}
+    <div class="footer-col">
+      <p class="footer-brand">{{ shop.name }}</p>
+      {% if section.settings.brand_text != blank %}
+        <p class="footer-brand-text">{{ section.settings.brand_text }}</p>
+      {% endif %}
+    </div>
+
+    {%- comment -%} Shop menu {%- endcomment -%}
+    {% if section.settings.shop_menu != blank %}
+      {% assign shop_menu = linklists[section.settings.shop_menu] %}
+      <div class="footer-col">
+        <p class="footer-col__heading">{{ shop_menu.title }}</p>
+        <ul class="footer-col__links">
+          {% for link in shop_menu.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
       </div>
-    </di>
-    <di>
-      <p class="footer-top-heading">Shop</p>
-      <div class="footer-top-bottom">
-        <p>Elevating the everyday through sustainable, artisan-crafted bamboo home goods.</p>
+    {% endif %}
+
+    {%- comment -%} Company menu {%- endcomment -%}
+    {% if section.settings.company_menu != blank %}
+      {% assign company_menu = linklists[section.settings.company_menu] %}
+      <div class="footer-col">
+        <p class="footer-col__heading">{{ company_menu.title }}</p>
+        <ul class="footer-col__links">
+          {% for link in company_menu.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
       </div>
-    </di>
-    <di>
-      <p class="footer-top-heading">Company</p>
-      <div class="footer-top-bottom">
-        <p>Elevating the everyday through sustainable, artisan-crafted bamboo home goods.</p>
+    {% endif %}
+
+    {%- comment -%} Support menu {%- endcomment -%}
+    {% if section.settings.support_menu != blank %}
+      {% assign support_menu = linklists[section.settings.support_menu] %}
+      <div class="footer-col">
+        <p class="footer-col__heading">{{ support_menu.title }}</p>
+        <ul class="footer-col__links">
+          {% for link in support_menu.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
       </div>
-    </di>
-    <di>
-      <p class="footer-top-heading">Support</p>
-      <div class="footer-top-bottom">
-        <p>Elevating the everyday through sustainable, artisan-crafted bamboo home goods.</p>
-      </div>
-    </di>
+    {% endif %}
+
   </div>
+
   <div class="footer-bottom">
-    &copy;
-    {{ 'now' | date: '%Y' }}
-    {{ shop.name | link_to: routes.root_url }}
+    &copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }}
   </div>
 </footer>
 
 {% stylesheet %}
-  .footer-bottom {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    justify-content: center;
-    padding-bottom: 10px;
-    font-size: 12px;
-    font-weight: bolder;
-    color: #50453b;
+  .footer-wrapper {
+    border-top: 1px solid #e8e3dc;
+    padding-top: 48px;
   }
 
   .footer-top {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 20px;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 32px;
+    padding-inline: 57px;
+    margin-bottom: 40px;
   }
 
-  .footer-top-heading {
+  .footer-brand {
+    font-size: 20px;
+    font-weight: 700;
     color: #4a6546;
     margin-bottom: 10px;
-    font-weight: bold;
-    font-size: 14px;
   }
 
-  .footer-top-bottom {
+  .footer-brand-text {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.6;
+    max-width: 220px;
+  }
+
+  .footer-col__heading {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1c19;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .footer-col__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 10px;
   }
 
-  .company-name {
-    font-size: 24px;
-    margin-bottom: 3px;
-  }
-
-  footer a {
+  .footer-col__links a {
+    font-size: 13px;
+    color: #4b5563;
     text-decoration: none;
-    color: var(--color-foreground);
+    transition: color 0.15s;
   }
 
-  footer .footer__links,
-  footer .footer__payment {
+  .footer-col__links a:hover {
+    color: #4a6546;
+  }
+
+  .footer-bottom {
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    gap: 4px;
+    justify-content: center;
+    padding-block: 16px;
+    font-size: 12px;
+    color: #9ca3af;
+    border-top: 1px solid #e8e3dc;
+  }
+
+  .footer-bottom a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  @media (max-width: 900px) {
+    .footer-top {
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      padding-inline: 24px;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .footer-top {
+      grid-template-columns: 1fr;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "t:general.footer",
+  "name": "Footer",
   "settings": [
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:labels.menu"
+      "type": "text",
+      "id": "brand_text",
+      "label": "Brand description",
+      "default": "Elevating the everyday through sustainable, artisan-crafted bamboo home goods."
     },
     {
-      "type": "checkbox",
-      "id": "show_payment_icons",
-      "label": "t:labels.show_payment_icons",
-      "default": true
+      "type": "link_list",
+      "id": "shop_menu",
+      "label": "Shop menu"
+    },
+    {
+      "type": "link_list",
+      "id": "company_menu",
+      "label": "Company menu"
+    },
+    {
+      "type": "link_list",
+      "id": "support_menu",
+      "label": "Support menu"
     }
   ]
 }

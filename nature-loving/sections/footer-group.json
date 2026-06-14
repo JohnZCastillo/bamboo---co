@@ -14,8 +14,10 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "brand_text": "Elevating the everyday through sustainable, artisan-crafted bamboo home goods.",
+        "shop_menu": "category-menu",
+        "company_menu": "category-menu",
+        "support_menu": "category-menu"
       }
     }
   },

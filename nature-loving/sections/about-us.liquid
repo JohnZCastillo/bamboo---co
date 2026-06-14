@@ -1,12 +1,301 @@
-<section class="container">
-  <h1>{{ page.title }}</h1>
-</section>
+<div class="about-contact full-width">
+  <div class="about-contact__inner">
 
-helloo world
+    <div class="about-contact__left">
+      {% if section.settings.heading != blank %}
+        <h2 class="about-contact__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+
+      {% if section.blocks.size > 0 %}
+        <ul class="about-contact__locations">
+          {% for block in section.blocks %}
+            {% if block.type == 'location' %}
+              <li class="about-contact__location" {{ block.shopify_attributes }}>
+                {% if block.settings.label != blank %}
+                  <span class="about-contact__location-label">{{ block.settings.label }}</span>
+                {% endif %}
+                {% if block.settings.address != blank %}
+                  <p class="about-contact__location-address">{{ block.settings.address }}</p>
+                {% endif %}
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if section.settings.image != blank %}
+        <div class="about-contact__image">
+          <img
+            src="{{ section.settings.image | image_url: width: 640 }}"
+            alt="{{ section.settings.heading | escape }}"
+            width="640"
+            height="400"
+            loading="lazy"
+          >
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="about-contact__right">
+      {% if section.settings.form_heading != blank %}
+        <h3 class="about-contact__form-heading">{{ section.settings.form_heading }}</h3>
+      {% endif %}
+      {% form 'contact' %}
+        {% if form.posted_successfully? %}
+          <p class="about-contact__success">Thanks for reaching out! We'll be in touch soon.</p>
+        {% endif %}
+        <div class="about-contact__field">
+          <label for="ContactForm-name" class="about-contact__label">Name</label>
+          <input
+            type="text"
+            id="ContactForm-name"
+            name="contact[name]"
+            class="about-contact__input"
+            autocomplete="name"
+            value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+          >
+        </div>
+        <div class="about-contact__field">
+          <label for="ContactForm-email" class="about-contact__label">Email <span aria-hidden="true">*</span></label>
+          <input
+            type="email"
+            id="ContactForm-email"
+            name="contact[email]"
+            class="about-contact__input"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+            required
+            aria-required="true"
+          >
+        </div>
+        <div class="about-contact__field">
+          <label for="ContactForm-message" class="about-contact__label">Message</label>
+          <textarea
+            id="ContactForm-message"
+            name="contact[body]"
+            class="about-contact__input about-contact__textarea"
+            rows="5"
+          >{{ form.body }}</textarea>
+        </div>
+        <button type="submit" class="about-contact__submit">
+          {{ section.settings.submit_label | default: 'Send Message' }}
+        </button>
+      {% endform %}
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .about-contact {
+    background-color: #f9f7f4;
+    padding-block: 72px;
+  }
+
+  .about-contact__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+    max-width: var(--page-width, 90rem);
+    margin-inline: auto;
+    padding-inline: var(--page-margin, 20px);
+  }
+
+  .about-contact__heading {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1c19;
+    margin-bottom: 24px;
+  }
+
+  .about-contact__locations {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .about-contact__location-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #7c572d;
+    margin-bottom: 4px;
+  }
+
+  .about-contact__location-address {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.6;
+  }
+
+  .about-contact__image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+  }
+
+  .about-contact__right {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 36px 32px;
+    border: 1px solid #e8e3dc;
+  }
+
+  .about-contact__form-heading {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1c19;
+    margin-bottom: 24px;
+  }
+
+  .about-contact__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+
+  .about-contact__label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .about-contact__input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #d1ccc5;
+    border-radius: var(--style-border-radius-inputs, 6px);
+    font-size: 14px;
+    color: #1a1c19;
+    background-color: #fafafa;
+    transition: border-color 0.2s;
+  }
+
+  .about-contact__input:focus {
+    outline: none;
+    border-color: #7c572d;
+  }
+
+  .about-contact__textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .about-contact__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 13px 24px;
+    background-color: #7c572d;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border: none;
+    border-radius: var(--style-border-radius-inputs, 6px);
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .about-contact__submit:hover {
+    background-color: #6a4925;
+  }
+
+  .about-contact__success {
+    padding: 12px 16px;
+    background-color: #d1fae5;
+    color: #065f46;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+
+  @media (max-width: 768px) {
+    .about-contact__inner {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    .about-contact {
+      padding-block: 48px;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
-  "name": "About Us",
-  "settings": []
+  "name": "Contact Us",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Visit Bamboo & Co."
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form Heading",
+      "default": "Send us a message"
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Submit Button Label",
+      "default": "Send Message"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Store Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "location",
+      "name": "Location",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Location Label"
+        },
+        {
+          "type": "textarea",
+          "id": "address",
+          "label": "Address"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Us",
+      "blocks": [
+        {
+          "type": "location",
+          "settings": {
+            "label": "Flagship Store",
+            "address": "BGC, Taguig, Metro Manila"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

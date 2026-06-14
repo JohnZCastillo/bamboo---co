@@ -1,30 +1,177 @@
-<div class="container">
-  <div class="social-wrapper">
-    <div class="social-heading">
-      <h2>{{ section.settings.header }}</h2>
-      <p>{{ section.settings.paragraph }}</p>
-    </div>
-    <div class="social-images">
-      <img class="social-images-item" src="{{ section.settings.image_1 | image_url: width: 300 }}">
-      <img class="social-images-item" src="{{ section.settings.image_2 | image_url: width: 300 }}">
-      <img class="social-images-item" src="{{ section.settings.image_3 | image_url: width: 300 }}">
-      <img class="social-images-item" src="{{ section.settings.image_4 | image_url: width: 300 }}">
-    </div>
+<div class="socials-section container">
+  <div class="socials-head">
+    {% if section.settings.header != blank %}
+      <h2 class="socials-head__title">{{ section.settings.header }}</h2>
+    {% endif %}
+    {% if section.settings.paragraph != blank %}
+      <p class="socials-head__subtitle">{{ section.settings.paragraph }}</p>
+    {% endif %}
+  </div>
+
+  <div class="socials-grid">
+    {% for i in (1..4) %}
+      {% assign img_key = 'image_' | append: i %}
+      {% assign img = section.settings[img_key] %}
+      {% assign link_key = 'link_' | append: i %}
+      {% assign link = section.settings[link_key] %}
+
+      <a
+        class="socials-card"
+        href="{{ link | default: '#' }}"
+        {% unless link %}
+          aria-hidden="true" tabindex="-1"
+        {% endunless %}
+        aria-label="View Instagram post {{ i }}"
+      >
+        <div class="socials-card__image-wrap">
+          {% if img %}
+            <img
+              class="socials-card__image"
+              src="{{ img | image_url: width: 600, height: 600, crop: 'center' }}"
+              alt="{{ img.alt | default: 'Instagram post' | escape }}"
+              width="300"
+              height="300"
+              loading="lazy"
+            >
+          {% else %}
+            <div class="socials-card__image socials-card__image--placeholder">
+              {{ 'lifestyle-' | append: i | placeholder_svg_tag: 'socials-card__svg' }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="socials-card__overlay" aria-hidden="true">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#ffffff"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </div>
+      </a>
+    {% endfor %}
   </div>
 </div>
 
 {% stylesheet %}
-  .social-heading {
+  .socials-section {
+    padding-block: 72px;
+  }
+
+  /* ── Heading ── */
+  .socials-head {
+    text-align: center;
+    margin-bottom: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .socials-head__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1c19;
+  }
+
+  .socials-head__subtitle {
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  /* ── Grid ── */
+  .socials-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  /* ── Card ── */
+  .socials-card {
+    position: relative;
+    display: block;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    aspect-ratio: 1 / 1;
+    background: #e8e4dc;
+  }
+
+  .socials-card__image-wrap {
+    width: 100%;
+    height: 100%;
+  }
+
+  .socials-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+
+  .socials-card__image--placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: #e8e4dc;
+    padding: 24px;
   }
-  .social-images {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+
+  .socials-card__svg {
+    width: 60%;
+    height: 60%;
+    color: #9ca3af;
+  }
+
+  /* Hover overlay with Instagram icon */
+  .socials-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: background 0.25s ease, opacity 0.25s ease;
+  }
+
+  .socials-card:hover .socials-card__image {
+    transform: scale(1.05);
+  }
+
+  .socials-card:hover .socials-card__overlay {
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 1;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .socials-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .socials-section {
+      padding-block: 48px;
+    }
+
+    .socials-grid {
+      gap: 8px;
+    }
   }
 {% endstylesheet %}
+
 {% schema %}
 {
   "name": "Socials",
@@ -32,12 +179,12 @@
     {
       "type": "text",
       "id": "header",
-      "label": "Header"
+      "label": "Heading"
     },
     {
       "type": "text",
       "id": "paragraph",
-      "label": "Paragraph"
+      "label": "Subtitle"
     },
     {
       "type": "image_picker",
@@ -45,9 +192,19 @@
       "label": "Image 1"
     },
     {
+      "type": "url",
+      "id": "link_1",
+      "label": "Link 1"
+    },
+    {
       "type": "image_picker",
       "id": "image_2",
       "label": "Image 2"
+    },
+    {
+      "type": "url",
+      "id": "link_2",
+      "label": "Link 2"
     },
     {
       "type": "image_picker",
@@ -55,10 +212,23 @@
       "label": "Image 3"
     },
     {
+      "type": "url",
+      "id": "link_3",
+      "label": "Link 3"
+    },
+    {
       "type": "image_picker",
       "id": "image_4",
       "label": "Image 4"
+    },
+    {
+      "type": "url",
+      "id": "link_4",
+      "label": "Link 4"
     }
-  ]
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

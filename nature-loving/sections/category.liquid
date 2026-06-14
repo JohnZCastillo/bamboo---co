@@ -1,70 +1,140 @@
-<div class="full-width container category-container">
-  <div class="category-wrapper">
-    <div class="category-header">
-      <h2>{{ section.settings.header }}</h2>
-      <a class="normal-link" href="{{ section.settings.product_list }}">{{ section.settings.tagline }}</a>
-    </div>
-    <div class="category-list">
-      {% for category in section.blocks %}
-        <div
-          class="category-item"
+<div class="category-section full-width container">
+  <div class="category-head">
+    <h2 class="category-head__title">{{ section.settings.header }}</h2>
+    {% if section.settings.tagline != blank %}
+      <a class="category-head__link" href="{{ section.settings.link | default: routes.all_products_collection_url }}">
+        {{ section.settings.tagline }}
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="category-grid">
+    {% for block in section.blocks %}
+      <a
+        class="category-card"
+        href="{{ block.settings.action | default: routes.all_products_collection_url }}"
+        {% if block.settings.background %}
+          style="background-image: url('{{ block.settings.background | image_url: width: 900 }}')"
+        {% else %}
           style="background-image: url('{{ 'category-1.png' | asset_url }}')"
-        >
-          <a class="normal-link" href="{{ category.settings.action }}">
-            <h3 class="category-item-header">{{ category.settings.header }}</h3>
-            <p class="category-item-tagline">{{ category.settings.tagline }}</p>
-          </a>
+        {% endif %}
+        {{ block.shopify_attributes }}
+      >
+        <div class="category-card__overlay"></div>
+        <div class="category-card__content">
+          <h3 class="category-card__title">{{ block.settings.header }}</h3>
+          {% if block.settings.tagline != blank %}
+            <p class="category-card__tagline">{{ block.settings.tagline }}</p>
+          {% endif %}
         </div>
-      {% endfor %}
-    </div>
+      </a>
+    {% endfor %}
   </div>
 </div>
 
 {% stylesheet %}
-  .category-container {
-    padding-block: 80px;
+  .category-section {
+    padding-block: 72px;
   }
 
-  .category-header {
+  /* ── Section header ── */
+  .category-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 48px;
+    margin-bottom: 32px;
   }
 
-  .category-list {
+  .category-head__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1c19;
+  }
+
+  .category-head__link {
+    font-size: 13px;
+    color: #6b7280;
+    text-decoration: none;
+    border-bottom: 1px solid #d1d5db;
+    padding-bottom: 1px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  .category-head__link:hover {
+    color: #c8a96e;
+    border-color: #c8a96e;
+  }
+
+  /* ── Cards grid ── */
+  .category-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
 
-  .category-item {
+  .category-card {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: start;
-    justify-content: end;
-    height: 463px;
-    padding: 48px;
-    border-radius: 10px;
+    justify-content: flex-end;
+    height: 420px;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: bottom;
-
-    color: white;
+    background-position: center;
+    transition: transform 0.3s ease;
   }
 
-  .category-item-header {
-    font-size: 24px;
-    font-weight: 400;
+  .category-card:hover {
+    transform: translateY(-4px);
   }
 
-  .category-item-tagline {
-    font-size: 14px;
+  /* dark gradient overlay */
+  .category-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 80%);
+    pointer-events: none;
   }
 
-  @media (max-width: 1100px) {
-    .highlights {
+  .category-card__content {
+    position: relative;
+    padding: 28px 32px;
+    color: #ffffff;
+  }
+
+  .category-card__title {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .category-card__tagline {
+    font-size: 13px;
+    opacity: 0.85;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .category-section {
+      padding-block: 48px;
+    }
+
+    .category-grid {
       grid-template-columns: 1fr;
+    }
+
+    .category-card {
+      height: 300px;
     }
   }
 {% endstylesheet %}
@@ -76,56 +146,54 @@
     {
       "type": "text",
       "id": "header",
-      "label": "Header"
+      "label": "Section heading"
     },
     {
       "type": "text",
       "id": "tagline",
-      "label": "Tagline"
+      "label": "View all link label"
     },
     {
-      "type": "text",
-      "id": "paragraph",
-      "label": "paragraph"
-    },
-    {
-      "type": "image_picker",
-      "id": "background",
-      "label": "Background"
-    },
-    {
-      "type": "product_list",
-      "id": "product_list",
-      "label": "Product List"
+      "type": "url",
+      "id": "link",
+      "label": "View all link URL"
     }
   ],
   "blocks": [
     {
-      "name": "category",
+      "name": "Category card",
       "type": "category",
       "settings": [
         {
           "type": "text",
           "id": "header",
-          "label": "Header"
+          "label": "Title"
         },
         {
           "type": "text",
           "id": "tagline",
-          "label": "Tagline"
+          "label": "Subtitle"
         },
         {
           "type": "image_picker",
           "id": "background",
-          "label": "Background"
+          "label": "Background image"
         },
         {
           "type": "url",
           "id": "action",
-          "label": "Action"
+          "label": "Link URL"
         }
       ]
     }
-  ]
+  ],
+  "presets": [
+    {
+      "name": "Category"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

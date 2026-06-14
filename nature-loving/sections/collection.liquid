@@ -5,127 +5,685 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
-<div class="container">
-  <h1>{{ collection.title }}</h1>
-  <p>
-    Discover our curated collection of sustainable home essentials, thoughtfully designed to bring intentionality and
-    natural warmth into your daily rituals.
-  </p>
+{% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+
+<div class="collection-page">
+  {%- comment -%} Breadcrumb {%- endcomment -%}
+  <nav class="collection-breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span aria-hidden="true"> › </span>
+    <span>{{ collection.title }}</span>
+  </nav>
+
+  {%- comment -%} Page heading {%- endcomment -%}
+  <div class="collection-heading">
+    <h1>{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <p class="collection-description">{{ collection.description }}</p>
+    {% else %}
+      <p class="collection-description">
+        Discover our curated collection of sustainable home essentials, thoughtfully designed to bring intentionality
+        and natural warmth into your daily rituals.
+      </p>
+    {% endif %}
+  </div>
 
   <div class="collection-body">
-    <div>
-      <h2>Categories</h2>
-      <div class="category-collection">
-        {% for category in collections %}
-          <form>
-            <input type="checkbox">
-            <label>{{ category.title }}</label>
-          </form>
-        {% endfor %}
+    {%- comment -%} Sidebar filters {%- endcomment -%}
+    <aside class="collection-sidebar">
+      <div class="sidebar-group">
+        <h3 class="sidebar-group__title">Categories</h3>
+        <ul class="sidebar-categories">
+          {% for cat in collections %}
+            {% unless cat.handle == 'frontpage' %}
+              <li>
+                <label class="sidebar-category">
+                  <input
+                    type="checkbox"
+                    {% if cat.handle == collection.handle %}
+                      checked
+                    {% endif %}
+                    onclick="window.location='{{ cat.url }}'"
+                  >
+                  <span>{{ cat.title }}</span>
+                </label>
+              </li>
+            {% endunless %}
+          {% endfor %}
+        </ul>
       </div>
-    </div>
-    <div class="collection-products">
-      {% paginate collection.products by 20 %}
-        {% for product in collection.products %}
-          <div class="collection-product">
-            {% if product.featured_image %}
-              {% render 'image',
-                class: 'collection-product__image',
-                image: product.featured_image,
-                url: product.url,
-                width: 100,
-                height: 100,
-                crop: 'center'
-              %}
-            {% endif %}
-            <div class="product-details">
-              <p class="product-name">{{ product.title | escape | link_to: product.url }}</p>
 
-              <div class="product-action">
-                <p class="product-price">{{ product.price | money }}</p>
-                <form action="/cart/add" method="post" id="product-form-{{ product.id }}">
-                  <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-                  <div>
-                    <button class="product-cta" type="submit" name="add">Add</button>
-                  </div>
-                </form>
+      <div class="sidebar-group">
+        <h3 class="sidebar-group__title">Price Range</h3>
+        <div class="price-range-slider">
+          <div class="price-range-track">
+            <div class="price-range-fill"></div>
+          </div>
+          <div class="price-range-labels">
+            <span>$0</span>
+            <span>$200+</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-group">
+        <label class="sidebar-category">
+          <input type="checkbox" id="in-stock-filter">
+          <span>In Stock Only</span>
+        </label>
+      </div>
+    </aside>
+
+    {%- comment -%} Main product grid {%- endcomment -%}
+    <div class="collection-main">
+      {% paginate collection.products by section.settings.products_per_page %}
+        <div class="collection-toolbar">
+          <p class="collection-count">Showing {{ collection.products_count }} products</p>
+          <div class="collection-sort">
+            <label for="sort-select">Sort by:</label>
+            <select id="sort-select" onchange="window.location=this.value">
+              {% for option in collection.sort_options %}
+                <option
+                  value="{{ collection.url }}?sort_by={{ option.value }}"
+                  {% if option.value == sort_by %}
+                    selected
+                  {% endif %}
+                >
+                  {{ option.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="collection-grid">
+          {% for product in collection.products %}
+            <div class="product-card">
+              {%- comment -%} Product image {%- endcomment -%}
+              <div class="product-card__image-wrap">
+                {% if product.featured_image %}
+                  <a href="{{ product.url }}" class="product-card__image-link">
+                    <img
+                      src="{{ product.featured_image | image_url: width: 600, height: 600, crop: 'center' }}"
+                      alt="{{ product.featured_image.alt | escape }}"
+                      class="product-card__image"
+                      loading="lazy"
+                      width="600"
+                      height="600"
+                    >
+                  </a>
+                {% else %}
+                  <a href="{{ product.url }}" class="product-card__image-link product-card__image-link--placeholder">
+                    {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+                  </a>
+                {% endif %}
+
+                {%- comment -%} Badge {%- endcomment -%}
+                {% if product.tags contains 'sustainable' %}
+                  <span class="product-card__badge product-card__badge--sustainable">Sustainable</span>
+                {% elsif product.tags contains 'new' %}
+                  <span class="product-card__badge product-card__badge--new">New</span>
+                {% endif %}
+
+                {%- comment -%} Wishlist button {%- endcomment -%}
+                <button class="product-card__wishlist" aria-label="Add to wishlist">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                </button>
+              </div>
+
+              {%- comment -%} Product info {%- endcomment -%}
+              <div class="product-card__info">
+                <div class="product-card__meta">
+                  <a href="{{ product.url }}" class="product-card__title">{{ product.title }}</a>
+                  {% if product.type != blank %}
+                    <p class="product-card__type">{{ product.type }}</p>
+                  {% endif %}
+                </div>
+
+                <div class="product-card__action">
+                  <span class="product-card__price">{{ product.price | money }}</span>
+                  <form action="/cart/add" method="post" id="product-form-{{ product.id }}">
+                    <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                    <button class="product-card__btn" type="submit" name="add">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                      </svg>
+                      Add
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-        {% endfor %}
-        {{ paginate | default_pagination }}
+          {% endfor %}
+        </div>
+
+        {%- comment -%} Pagination {%- endcomment -%}
+        {% if paginate.pages > 1 %}
+          <nav class="collection-pagination" aria-label="Pagination">
+            {% if paginate.previous %}
+              <a
+                href="{{ paginate.previous.url }}"
+                class="pagination-btn pagination-btn--arrow"
+                aria-label="Previous page"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+              </a>
+            {% else %}
+              <span class="pagination-btn pagination-btn--arrow pagination-btn--disabled" aria-disabled="true">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+              </span>
+            {% endif %}
+
+            {% for part in paginate.parts %}
+              {% if part.is_link %}
+                <a href="{{ part.url }}" class="pagination-btn">{{ part.title }}</a>
+              {% elsif part.title == paginate.current_page %}
+                <span class="pagination-btn pagination-btn--active" aria-current="page">{{ part.title }}</span>
+              {% else %}
+                <span class="pagination-btn pagination-btn--ellipsis">{{ part.title }}</span>
+              {% endif %}
+            {% endfor %}
+
+            {% if paginate.next %}
+              <a href="{{ paginate.next.url }}" class="pagination-btn pagination-btn--arrow" aria-label="Next page">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </a>
+            {% else %}
+              <span class="pagination-btn pagination-btn--arrow pagination-btn--disabled" aria-disabled="true">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </span>
+            {% endif %}
+          </nav>
+        {% endif %}
       {% endpaginate %}
     </div>
   </div>
 </div>
 
 {% stylesheet %}
-  .collection-products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  /* ── Page wrapper ─────────────────────────────────────────── */
+  .collection-page {
+    padding-inline: 57px;
+    padding-block: 32px 64px;
   }
 
+  /* ── Breadcrumb ───────────────────────────────────────────── */
+  .collection-breadcrumb {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 16px;
+  }
+
+  .collection-breadcrumb a {
+    color: #6b7280;
+    text-decoration: none;
+  }
+
+  .collection-breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Heading ──────────────────────────────────────────────── */
+  .collection-heading {
+    margin-bottom: 32px;
+  }
+
+  .collection-heading h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1c19;
+    margin-bottom: 8px;
+  }
+
+  .collection-description {
+    font-size: 14px;
+    color: #4b5563;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  /* ── Two-column layout ────────────────────────────────────── */
   .collection-body {
     display: grid;
-    grid-template-columns: 200px auto;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    align-items: start;
   }
 
-  .category-collection {
-    display: grid;
-    grid-template-columns: 1fr;
+  /* ── Sidebar ──────────────────────────────────────────────── */
+  .collection-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
   }
 
-  .collection-products {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-    justify-content: stretch;
+  .sidebar-group__title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1a1c19;
+    margin-bottom: 12px;
   }
 
-  .product-name > a {
-    font-size: 24px;
-    color: #1a1c19 !important;
-    text-decoration: none !important;
+  .sidebar-categories {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
-  .product-details {
-    padding-inline: 10px;
-    padding-block: 5px;
+  .sidebar-category {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #374151;
+    cursor: pointer;
   }
 
-  .collection-product {
-    border: solid 1px black;
+  .sidebar-category input[type='checkbox'] {
+    accent-color: #4a6546;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
   }
 
-  .product-action {
-    margin-top: auto;
+  /* Price range */
+  .price-range-track {
+    position: relative;
+    height: 4px;
+    background-color: #d1d5db;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+
+  .price-range-fill {
+    position: absolute;
+    inset: 0;
+    background-color: #4a6546;
+    border-radius: 2px;
+    width: 100%;
+  }
+
+  .price-range-labels {
     display: flex;
     justify-content: space-between;
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  /* ── Main area ────────────────────────────────────────────── */
+  .collection-main {
+    min-width: 0;
+  }
+
+  /* ── Toolbar ──────────────────────────────────────────────── */
+  .collection-toolbar {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
   }
 
-  .product-price {
-    font-size: 18px;
-    font-weight: bold;
-    color: #7c572d;
+  .collection-count {
+    font-size: 13px;
+    color: #6b7280;
   }
 
-  .product-cta {
-    padding-inline: 24px;
-    padding-block: 12px;
-    background-color: #4a6546;
-    border-radius: 8px;
-    outline: none;
-    box-shadow: none;
+  .collection-sort {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #374151;
+  }
+
+  .collection-sort label {
+    color: #6b7280;
+  }
+
+  .collection-sort select {
     border: none;
-    color: white;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1c19;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    appearance: auto;
+  }
+
+  /* ── Product grid ─────────────────────────────────────────── */
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  /* ── Product card ─────────────────────────────────────────── */
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .product-card__image-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background-color: #f3f4f0;
+    overflow: hidden;
+  }
+
+  .product-card__image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover .product-card__image {
+    transform: scale(1.03);
+  }
+
+  .product-card__image-link--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-card__placeholder {
+    width: 60%;
+    height: 60%;
+    color: #9ca3af;
+  }
+
+  /* Badge */
+  .product-card__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  .product-card__badge--sustainable {
+    background-color: #4a6546;
+    color: #ffffff;
+  }
+
+  .product-card__badge--new {
+    background-color: #c8a96e;
+    color: #ffffff;
+  }
+
+  /* Wishlist */
+  .product-card__wishlist {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #4b5563;
+    padding: 0;
+    transition: color 0.2s;
+  }
+
+  .product-card__wishlist:hover {
+    color: #ef4444;
+  }
+
+  /* Card info */
+  .product-card__info {
+    padding: 14px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .product-card__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1c19;
+    text-decoration: none;
+    line-height: 1.3;
+    display: block;
+  }
+
+  .product-card__title:hover {
+    text-decoration: underline;
+  }
+
+  .product-card__type {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
+  }
+
+  .product-card__action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+  }
+
+  .product-card__price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #c8a96e;
+  }
+
+  .product-card__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background-color: #4a6546;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .product-card__btn:hover {
+    background-color: #3a5238;
+  }
+
+  /* ── Pagination ───────────────────────────────────────────── */
+  .collection-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 48px;
+  }
+
+  .pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     font-size: 14px;
+    color: #374151;
+    text-decoration: none;
+    border: 1px solid #e5e7eb;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s;
+  }
+
+  .pagination-btn:hover:not(.pagination-btn--active):not(.pagination-btn--disabled) {
+    background-color: #f3f4f0;
+    border-color: #d1d5db;
+  }
+
+  .pagination-btn--active {
+    background-color: #1a1c19;
+    color: #ffffff;
+    border-color: #1a1c19;
+    font-weight: 600;
+  }
+
+  .pagination-btn--arrow {
+    color: #374151;
+    border-color: #e5e7eb;
+  }
+
+  .pagination-btn--disabled {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .pagination-btn--ellipsis {
+    border: none;
+    cursor: default;
+  }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 960px) {
+    .collection-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .collection-page {
+      padding-inline: 16px;
+    }
+
+    .collection-body {
+      grid-template-columns: 1fr;
+    }
+
+    .collection-sidebar {
+      display: none;
+    }
+
+    .collection-grid {
+      grid-template-columns: 1fr;
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.collection",
-  "settings": []
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 6,
+      "max": 48,
+      "step": 6,
+      "default": 12
+    }
+  ]
 }
 {% endschema %}

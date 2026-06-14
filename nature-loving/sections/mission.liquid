@@ -1,79 +1,237 @@
-<div class="container">
-  <div class="mission-wrapper">
-    <div class="mission-image-wrapper">
-      <img class="mission-image-wrapper-image" src="{{ section.settings.background | image_url: width: 300 }}">
-      <p class="mission-image-wrapper-fun-fact">{{ section.settings.fun_fact }}</p>
-    </div>
-    <div>
-      <h2>
-        {{ section.settings.header }}
-      </h2>
-      <p>{{ section.settings.paragraph }}</p>
+<div class="mission-section container">
+  <div class="mission-layout">
+    {%- comment -%} ── Left: image + fun-fact overlay ──────────── {%- endcomment -%}
+    <div class="mission-media">
+      {% if section.settings.background %}
+        <img
+          class="mission-media__img"
+          src="{{ section.settings.background | image_url: width: 900 }}"
+          alt="{{ section.settings.header | escape }}"
+          width="900"
+          height="1100"
+          loading="lazy"
+        >
+      {% else %}
+        <div class="mission-media__img mission-media__img--placeholder">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'mission-media__svg' }}
+        </div>
+      {% endif %}
 
-      <div class="mission-sub">
-        {% for mission in section.blocks %}
-          <div class="mission-sub-item">
-            <div class="mission-sub-heading">
-              <p class="mission-sub-heading-header">{{ mission.settings.icon }}</p>
-              <p class="mission-sub-heading-paragraph">{{ mission.settings.mission }}</p>
+      {% if section.settings.fun_fact != blank %}
+        <div class="mission-fun-fact" aria-label="Fun fact">
+          <p class="mission-fun-fact__text">{{ section.settings.fun_fact }}</p>
+        </div>
+      {% endif %}
+    </div>
+
+    {%- comment -%} ── Right: copy + mission bullets ─────────── {%- endcomment -%}
+    <div class="mission-copy">
+      {% if section.settings.header != blank %}
+        <h2 class="mission-copy__title">{{ section.settings.header }}</h2>
+      {% endif %}
+
+      {% if section.settings.paragraph != blank %}
+        <p class="mission-copy__paragraph">{{ section.settings.paragraph }}</p>
+      {% endif %}
+
+      {% if section.blocks.size > 0 %}
+        <div class="mission-bullets">
+          {% for block in section.blocks %}
+            <div class="mission-bullet" {{ block.shopify_attributes }}>
+              <div class="mission-bullet__icon" aria-hidden="true">
+                {% if block.settings.icon != blank %}
+                  {{ block.settings.icon }}
+                {% else %}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="#4a6546"
+                    stroke="none"
+                  >
+                    <path d="M17 8C8 10 5.9 16.17 3.82 20.32L5.71 21l1-2.3A4.49 4.49 0 0 0 8 19c9-3 11.19-10 12.25-14.71L19 4 17 8z"/>
+                  </svg>
+                {% endif %}
+              </div>
+              <div class="mission-bullet__body">
+                <p class="mission-bullet__title">{{ block.settings.mission }}</p>
+                <p class="mission-bullet__text">{{ block.settings.paragraph }}</p>
+              </div>
             </div>
-            <p>{{ mission.settings.paragraph }}</p>
-          </div>
-        {% endfor %}
-      </div>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
   </div>
 </div>
 
 {% stylesheet %}
-  .mission-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  .mission-section {
+    padding-block: 72px;
   }
 
-  .mission-image-wrapper {
+  /* ── Two-column layout ── */
+  .mission-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  /* ── Left: media ── */
+  .mission-media {
     position: relative;
+    border-radius: 12px;
+    overflow: visible;
   }
 
-  .mission-image-wrapper-image {
+  .mission-media__img {
     width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    object-fit: cover;
+    aspect-ratio: 4 / 5;
   }
 
-  .mission-image-wrapper-fun-fact {
+  .mission-media__img--placeholder {
+    aspect-ratio: 4 / 5;
+    background: #e8e4dc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+  }
+
+  .mission-media__svg {
+    width: 50%;
+    height: 50%;
+    color: #9ca3af;
+  }
+
+  /* Fun-fact card */
+  .mission-fun-fact {
     position: absolute;
-    bottom: 0px;
-    right: 30px;
+    bottom: -24px;
+    right: -24px;
     background-color: #d4a574;
-    padding: 48px;
-    max-width: 320px;
-    border-radius: 5px;
-    font-size: 16px;
+    color: #ffffff;
+    padding: 28px 32px;
+    max-width: 280px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   }
 
-  .mission-sub {
+  .mission-fun-fact__text {
+    font-size: 14px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ── Right: copy ── */
+  .mission-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .mission-copy__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1c19;
+    line-height: 1.2;
+  }
+
+  .mission-copy__paragraph {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.75;
+  }
+
+  /* ── Mission bullets ── */
+  .mission-bullets {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 20px;
+    margin-top: 8px;
   }
 
-  .mission-sub-heading {
+  .mission-bullet {
     display: flex;
-    gap: 10px;
-    margin-bottom: 3px;
+    align-items: flex-start;
+    gap: 12px;
   }
 
-  .mission-sub-heading-header {
-    color: #1a1c19;
-    font-size: 14px;
-    font-weight: bold;
-  }
-
-  .mission-sub-heading-paragraph {
-    color: #50453b;
+  .mission-bullet__icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #e6ede5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 16px;
+    margin-top: 2px;
+  }
+
+  .mission-bullet__body {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .mission-bullet__title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1c19;
+    line-height: 1.3;
+  }
+
+  .mission-bullet__text {
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.55;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .mission-layout {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    .mission-fun-fact {
+      right: 16px;
+      bottom: -16px;
+      max-width: 240px;
+      padding: 20px 24px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .mission-section {
+      padding-block: 48px;
+    }
+
+    .mission-copy__title {
+      font-size: 22px;
+    }
+
+    .mission-bullets {
+      grid-template-columns: 1fr;
+    }
+
+    .mission-fun-fact {
+      position: static;
+      margin-top: 16px;
+      max-width: 100%;
+      box-shadow: none;
+    }
   }
 {% endstylesheet %}
+
 {% schema %}
 {
   "name": "Mission",
@@ -81,46 +239,49 @@
     {
       "type": "text",
       "id": "header",
-      "label": "Header"
+      "label": "Heading"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "paragraph",
       "label": "Paragraph"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "fun_fact",
-      "label": "Fun Fact"
+      "label": "Fun fact quote"
     },
     {
       "type": "image_picker",
       "id": "background",
-      "label": "Background"
+      "label": "Background image"
     }
   ],
   "blocks": [
     {
-      "name": "Mission",
+      "name": "Mission point",
       "type": "mission",
       "settings": [
         {
           "type": "text",
           "id": "mission",
-          "label": "Mission"
+          "label": "Title"
         },
         {
           "type": "text",
           "id": "paragraph",
-          "label": "Paragraph"
+          "label": "Description"
         },
         {
           "type": "text",
           "id": "icon",
-          "label": "Icon"
+          "label": "Icon (emoji or leave blank for leaf)"
         }
       ]
     }
-  ]
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}
